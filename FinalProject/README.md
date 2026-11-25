@@ -28,3 +28,60 @@ recordings split into `chapman_shaoxing` and `ningbo` folders.
 
 The raw data are not stored in this repository. See
 `results/source_data/ecg_arrhythmia_README.md` for download instructions.
+
+## How to reproduce
+
+The plan is in `vcm/VCM.md` (what we claim and how it is judged) and
+`prds/PRD.md` (exact procedure). Run every command from this folder
+(`FinalProject/`).
+
+**1. Environment.** Every package is pinned to an exact version.
+
+```text
+conda env create -f environment.yml
+conda activate bme4400-final
+python checks/check_environment.py        # every line must say PASS
+```
+
+**2. Data, outside the repository** (default `~/bme4191_ecg/`; any other folder
+works with `--data-root`).
+
+PhysioNet part 1 (Shaoxing):
+
+```text
+python src/download_ecg_arrhythmia.py
+```
+
+Do **not** download part 2 (Ningbo). It stays sealed until the models are
+frozen (PRD §5 step C2).
+
+figshare *ChapmanECG* files (needed for the labels and the 399 SI records):
+
+```text
+mkdir -p ~/bme4191_ecg/figshare_chapman && cd ~/bme4191_ecg/figshare_chapman
+curl -L -o Diagnostics.xlsx https://ndownloader.figshare.com/files/15653771
+curl -L -o ECGData.zip      https://ndownloader.figshare.com/files/15651326
+md5 Diagnostics.xlsx ECGData.zip     # Linux: md5sum
+#   Diagnostics.xlsx  f9795256cd8590f8b22f2f8f6762d89e
+#   ECGData.zip       2bf32d649e30c5648ba4a5938a1398f8
+unzip -q ECGData.zip                 # creates ECGData/ with 10,646 CSV files
+cd -
+```
+
+**3. Split.** The split is already committed. Rerunning it must give the same
+files:
+
+```text
+python src/make_split.py
+git status results/splits/            # must show no changes
+```
+
+`make_split.py` checks every count in VCM §8.1 and stops if one differs. The
+split is stratified by label with seed 4400. Every random seed used anywhere
+in the analysis is listed in PRD §3.
+
+**4. Evidence boundary.** Before every commit:
+
+```text
+python checks/check_evidence_boundary.py
+```

@@ -41,6 +41,7 @@ Only these files may be read. Data folder `DATA = ~/bme4191_ecg` (outside the re
 | Part-1 records | `DATA/ecg-arrhythmia/1.0.0/WFDBRecords/…/JS*.hea, .mat` | each verified against the checksum list | 10,247 records × 12 leads × 5,000 samples | PhysioNet |
 | Shaoxing labels and SI signals | `DATA/figshare_chapman/Diagnostics.xlsx`, `DATA/figshare_chapman/ECGData/*.csv` | MD5 checked by `src/figshare_check.py` | 10,646 rows; 399 SI CSVs of 5,000 × 12 | figshare *ChapmanECG* 4560497 |
 | Condition table | `DATA/ecg-arrhythmia/1.0.0/ConditionNames_SNOMED-CT.csv` | in the checksum list | — | PhysioNet |
+| Shaoxing units, split and folds | `results/splits/shaoxing_units.csv`, `shaoxing_test_ids.csv`, `shaoxing_dev_folds.csv` | sha256 in `results/splits/SHA256SUMS` | 9,887 / 1,978 / 7,909 rows | `src/make_split.py` (step A1) |
 | Part-2 records (Stage C only) | `DATA/ecg-arrhythmia/1.0.0/WFDBRecords/…/JS*.hea, .mat` for JS10647–JS45551 | each verified against the checksum list | 34,905 records | PhysioNet; downloaded only at step C2 (§15) |
 
 No other file may be read.
@@ -48,8 +49,18 @@ No other file may be read.
 ## 3. What must remain fixed
 
 - **Prediction unit and generalization unit:** one 12-lead ECG record (taken to be one patient, VCM §5). Splits are by record.
-- **Shaoxing units:** the 9,888 records of VCM v1 §8.1 (SB 3,888, SR 1,825, AFIB 1,778, ST 1,562, AFL 438, SI 397).
-- **Shaoxing split:** `train_test_split(test_size=0.2, stratify=label, random_state=4400)` on the units sorted by JS id (VCM v1 §8.2): about 7,910 development and 1,978 test records.
+- **Shaoxing units:** the 9,887 records of VCM v2 §8.1 (SB 3,888, SR 1,825, AFIB 1,778, ST 1,562, AFL 438, SI 396).
+- **Shaoxing split, stratified by label:** `train_test_split(test_size=0.2, stratify=label, random_state=4400)` on the units sorted by JS id (VCM v2 §8.2).
+
+  | Class | All | Development (80%) | Test (20%) | Each dev fold |
+  |---|---|---|---|---|
+  | SR | 1,825 | 1,460 | 365 | 292 |
+  | SB | 3,888 | 3,110 | 778 | 622 |
+  | ST | 1,562 | 1,250 | 312 | 250 |
+  | SI | 396 | 317 | 79 | 63–64 |
+  | AFIB | 1,778 | 1,422 | 356 | 284–285 |
+  | AFL | 438 | 350 | 88 | 70 |
+  | **Total** | **9,887** | **7,909** | **1,978** | 1,581–1,582 |
 - **Ningbo units:** the rule in §5 step C3, written now, before part 2 is downloaded.
 - **Target coding:** 0 SR, 1 SB, 2 ST, 3 SI, 4 AFIB, 5 AFL.
   - Shaoxing labels: `Diagnostics.xlsx` Rhythm (SR, SB, ST, SA, AFIB, AF).
@@ -59,18 +70,37 @@ No other file may be read.
 - **Crop before processing:** every filter, R-peak detection, feature and normalisation uses only the crop.
 - **Metric:** R3 (primary); per-class recall, precision and F1 for all six; F1-3 (macro F1 over SI, AFIB, AFL); macro recall and macro F1 over six; accuracy (§7).
 - **Floor:** M_HR (heart rate only).
-- **Seeds:** 4400 everywhere (split, folds, models, bootstrap) unless stated.
+- **Environment:** the `bme4400-final` conda environment from `environment.yml`, every package pinned to an exact version (§11).
+- **Random seeds.** Every source of randomness has a fixed seed:
+
+  | Step | Where the seed goes | Seed |
+  |---|---|---|
+  | 80/20 split | `train_test_split(random_state=…)` | 4400 |
+  | 5 development folds | `StratifiedKFold(shuffle=True, random_state=…)` | 4400 |
+  | HistGradientBoosting (M_HR, M_feat) | `random_state=…` | 4400 |
+  | Logistic regression | `random_state=…` | 4400 |
+  | MLP | `MLPClassifier(random_state=…)`; class-balance resampling `sklearn.utils.resample(random_state=…)` | 4400 |
+  | MiniRocket | `MiniRocketMultivariate(random_state=…)` | 4400 |
+  | 1D CNN weights, batch order, dropout | `random.seed`, `np.random.seed`, `torch.manual_seed`, and the `DataLoader`'s `generator=torch.Generator().manual_seed(…)` | 4400 (main); 4401 and 4402 for the spread (§7) |
+  | CNN early-stopping validation split | `train_test_split(test_size=0.1, stratify=label, random_state=…)` | 4400 |
+  | Negative control label shuffle | `np.random.default_rng(…).permutation` | 4400 |
+  | Bootstrap | `np.random.default_rng(…)` | 4400 |
+  | Feature extraction (NeuroKit2, SciPy) | deterministic, no seed | — |
 - **Evidence boundary:** §15.
 
 ## 4. Replication of earlier work
 
 Before any model result is interpreted, these must reproduce exactly (tolerance 0):
 1. Parts manifest sha256 as in §2.
-2. Shaoxing unit list: 9,907 → 9,902 → 9,888, and the six class counts in §3 (VCM v1 §8.1).
-3. SB / SR / ST vs the 60 / 100 bpm rule on `VentricularRate`: 7,253 of 7,283 agree (DRA O25).
+2. Shaoxing unit list: 9,907 → 9,901 → 9,887, and the six class counts in §3 (VCM v2 §8.1). `src/make_split.py` asserts these.
+3. The split files' SHA-256 equal `results/splits/SHA256SUMS`:
+   - `shaoxing_units.csv` `b708bacdaa9d986112c9b2c232b798184629202fc15213199c1b345f6372e5a3`
+   - `shaoxing_test_ids.csv` `2c95db54fdc3d65e611b0a8c8c7ea1f0e867dfdf4d545f982eb30945757c9d8a`
+   - `shaoxing_dev_folds.csv` `252f3eed531bee991abf774adaa82ecdd924e511bf426ade619fcce006047b28`
+4. SB / SR / ST vs the 60 / 100 bpm rule on `VentricularRate`: 7,253 of 7,283 agree (DRA O25).
 
 And within tolerance:
-4. Heart rate from §5 step A3 at T = 10 s is within 5 bpm of `VentricularRate` for at least 95% of Shaoxing development units (VCM v1 §6).
+5. Heart rate from §5 step A3 at T = 10 s is within 5 bpm of `VentricularRate` for at least 95% of Shaoxing development units (VCM v2 §6).
 
 If any check fails: stop and diagnose (§13). Nothing downstream is run.
 
@@ -78,9 +108,9 @@ If any check fails: stop and diagnose (§13). Nothing downstream is run.
 
 **Stage A: Shaoxing development set, 5-fold CV, every T**
 
-A1. **Units and split.** Build the 9,888-unit list and the 80/20 split (§3). Write `results/splits/shaoxing_test_ids.csv` (`record, label`) and its SHA-256, and **commit them before any feature is computed**.
+A1. **Units and split.** `python src/make_split.py` builds the 9,887-unit list and the 80/20 split (§3), asserts every count, and writes `results/splits/shaoxing_units.csv` (`record, label, code, source, signal_sha256`), `shaoxing_test_ids.csv` (`record, label, code`), `split_summary.json` and `SHA256SUMS`. **Done and committed 2026-11-25, before any feature is computed.** Teammates rerun it and check that `SHA256SUMS` is unchanged (§4).
 
-A2. **Folds.** On the development set, `StratifiedKFold(n_splits=5, shuffle=True, random_state=4400)`. Write `results/splits/shaoxing_dev_folds.csv` (`record, label, fold`) and commit it with A1. Every model and every T uses these folds.
+A2. **Folds.** Same script: on the development set sorted by JS id, `StratifiedKFold(n_splits=5, shuffle=True, random_state=4400)`, written to `results/splits/shaoxing_dev_folds.csv` (`record, label, code, fold`). Every model and every T uses these folds. Later scripts read the fold column from this file; they never re-create the folds.
 
 A3. **Features** (`src/features.py`), computed from the crop:
 - Preprocessing: `neurokit2.ecg_clean(signal, sampling_rate=500, method="neurokit")` per lead.
@@ -121,7 +151,7 @@ B3. Predict the Shaoxing test set at every T, once, by one script, committed sep
 
 **Stage C: all Shaoxing → Ningbo, once**
 
-C1. For each T and each model: refit the configuration selected in A5 on **all 9,888** Shaoxing units (CNN seed 4400; 10% early-stopping validation). No setting is changed. Save under `DATA/models/shaoxing_all/`, write `results/models/manifest_all.json`, commit.
+C1. For each T and each model: refit the configuration selected in A5 on **all 9,887** Shaoxing units (CNN seed 4400; 10% early-stopping validation). No setting is changed. Save under `DATA/models/shaoxing_all/`, write `results/models/manifest_all.json`, commit.
 
 C2. **Unseal Ningbo.** Only after C1 is committed: `python src/download_ecg_arrhythmia.py --part 2 --unseal-part2`. Record the date and commit hash in §15.
 
@@ -130,7 +160,7 @@ C3. **Ningbo unit list.** Rule, fixed now:
 2. Rhythm codes = the 11 codes in `src/dra_inspect.py` plus 251166008 and 17366009 (DRA §6).
 3. Keep records with **exactly one** rhythm code, and that code is one of the six in §3.
 4. Drop records with any all-zero lead, or with a header other than 12 leads × 5,000 samples at 500 Hz.
-5. For byte-identical `.mat` files, keep the lower JS id.
+5. Among records with identical signal arrays, keep the lowest JS id (same rule as Shaoxing).
 6. Drop any record whose signal hash equals a Shaoxing unit's.
 
 C4. **Ningbo check, before any prediction.** Write `results/ningbo/unit_check.json`: counts per class, number dropped at each step, number of other Dx codes, and whether the format matches part 1. This looks at labels and format only, not at model output.
@@ -221,14 +251,34 @@ Figures (`results/figures/`):
 
 ## 11. Library versions recorded
 
-Written to `results/versions.json` at every run: Python, numpy, scipy, pandas, scikit-learn, neurokit2, torch, sktime, wfdb, and the Git commit hash. `environment.yml` must add `neurokit2`, `pytorch` and `sktime` before step A3.
+**Pinned environment** (`environment.yml`, conda-forge, environment name `bme4400-final`):
+
+| Package | Version | Package | Version |
+|---|---|---|---|
+| python | 3.13.18 | statsmodels | 0.15.0 |
+| numpy | 2.3.5 | wfdb | 5.0.0 |
+| pandas | 2.3.3 | neurokit2 | 0.3.0 |
+| scipy | 1.18.1 | pytorch | 2.14.1 |
+| scikit-learn | 1.7.2 | sktime | 0.40.1 |
+| matplotlib | 3.11.2 | pytest | 9.2.0 |
+
+- The pins solve on macOS (arm64), Linux (CPU and CUDA builds) and Windows. `environment-lock-osx-arm64.txt` is the full exact package list of the reference Mac.
+- `python checks/check_environment.py` must pass (every version equal to its pin) before any step in §5.
+
+**Determinism settings for the CNN** (set at the top of the training script):
+- `torch.use_deterministic_algorithms(True)`; `torch.backends.cudnn.benchmark = False`; environment variable `CUBLAS_WORKSPACE_CONFIG=:4096:8` on CUDA.
+- `DataLoader(num_workers=0, generator=torch.Generator().manual_seed(seed))`; float32 throughout.
+- With these, a rerun on the same device type reproduces the same predictions. Across device types (CPU, Apple MPS, NVIDIA CUDA) floating-point order differs, so CNN results may differ slightly; the tolerance is R3 within 0.01 (§12). The device used is recorded.
+
+**Recorded at every run** in `results/versions.json`: Python and all pinned package versions, the device (CPU / MPS / CUDA and its name), the operating system, and the Git commit hash.
 
 ## 12. Verification and acceptance criteria
 
 In `tests/` (pytest), all must pass before results are accepted:
 - Input hashes in §2 match.
 - §4 replication checks.
-- Shaoxing unit count 9,888 with the §3 class counts; all signal hashes distinct.
+- `python checks/check_environment.py` passes.
+- Shaoxing unit count 9,887 with the §3 class counts; all signal hashes distinct; split files match `SHA256SUMS`.
 - Split and folds: the test-ID file hash equals the committed one; no record in both development and test; every development record in exactly one fold.
 - Crop: length is exactly 500·T samples starting at sample 0; T = 10 returns the full record.
 - Features computed on a crop do not change when samples after the crop are altered.

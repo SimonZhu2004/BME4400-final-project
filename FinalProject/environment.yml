@@ -1,15 +1,27 @@
-name: bme4191-p5
+# BME4400 final project environment. Every package that the analysis imports is
+# pinned to an exact version, so all teammates get the same numerical results.
+#
+#   conda env create -f environment.yml        (or: mamba env create -f environment.yml)
+#   conda activate bme4400-final
+#   python checks/check_environment.py
+#
+# environment-lock-osx-arm64.txt is the full, exact package list of the
+# reference machine (Apple Silicon Mac); on that platform it reproduces the
+# environment byte for byte:  conda create -n bme4400-final --file environment-lock-osx-arm64.txt
+name: bme4400-final
 channels:
   - conda-forge
 dependencies:
-  - python=3.13
-  - numpy
-  - pandas
-  - matplotlib
-  - scipy
-  - scikit-learn
-  - statsmodels
-  - wfdb # reads PhysioNet WFDB records (.hea + .mat) for the P5 ECG dataset
-  - jupyterlab
-  - ipykernel
-  - pytest
+  - python=3.13.18
+  - numpy=2.3.5
+  - pandas=2.3.3
+  - scipy=1.18.1
+  - scikit-learn=1.7.2
+  - matplotlib=3.11.2
+  - statsmodels=0.15.0
+  - wfdb=5.0.0          # reads PhysioNet WFDB records (.hea + .mat)
+  - neurokit2=0.3.0     # R peaks and wave delineation for the feature table
+  - pytorch=2.14.1      # 1D CNN; conda-forge picks a CUDA build on machines with an NVIDIA GPU
+  - sktime=0.40.1       # MiniRocket
+  - pytest=9.2.0
+  - ipykernel=7.4.0

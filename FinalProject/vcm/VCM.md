@@ -51,7 +51,7 @@ Counts come from the figshare `Diagnostics.xlsx` and equal the 2020 paper's Tabl
 - **Sinus labels are rate labels** [O]: SB / SR / ST labels follow 60 / 100 bpm thresholds on the measured ventricular rate (`VentricularRate`) in 7,253 of 7,283 records, 99.6% (DRA O25).
 - **SI is not rate-defined** [O]: 376 of its 399 records lie at 60–100 bpm, overlapping SR. AFIB and AFL span the whole rate range (DRA O26).
 - **One ECG = one patient** [I], from the paper's equal subject and record counts. No file carries a patient identifier (DRA U5).
-- **Duplicates** [O]: 13 pairs of records are byte-identical (DRA O10, O32).
+- **Duplicates** [O]: 13 pairs of part-1 records are byte-identical (DRA O10, O32). One more pair is among the SI records: the figshare CSVs of JS02561 and JS04771 are byte-identical, with identical Rhythm, age, sex and ventricular rate but different file names and timestamps (found by `src/make_split.py`, 2026-11-25; not in the DRA).
 - **Zero leads** [O]: 15 records have at least one all-zero lead (DRA O9), plus 2 of the SI records (DRA O31).
 - **Demographics:** rhythms differ by age and sex (e.g. AFIB patients are older).
 
@@ -110,7 +110,7 @@ _What do you not yet know that could change how this result should be interprete
 Unknowns about the dataset:
 
 - **Why PhysioNet removed the 399 SI records** (DRA U1). Their signals look structurally normal (DRA O31), but two have all-zero leads.
-- **Whether each record is a different patient** (DRA U5). The 13 identical pairs (DRA O10, O32) show that at least some duplication happened.
+- **Whether each record is a different patient** (DRA U5). The 14 identical pairs (DRA O10, O32, and the SI pair in §1) show that at least some duplication happened.
 - **How the labels were made for SI, AFIB and AFL** (DRA U9). SB/SR/ST follow the machine-measured rate; it is not known whether the others also follow a machine statement.
 - **Whether the "raw" signals were filtered before export** (DRA U8). Filtering affects P-wave and baseline features, and what the raw-signal models can see.
 
@@ -162,19 +162,21 @@ Written 2026-11-25. No feature has been computed and no model fitted.
 - **Unit list rule:**
   1. Start from the 10,646 rows of the figshare `Diagnostics.xlsx`. Row *k* is record JS*k* (DRA O22).
   2. Keep rows whose Rhythm is SB, SR, ST, SA, AFIB or AF: **9,907**.
-  3. From each of the 13 byte-identical pairs (DRA O10), drop the member with the higher JS id. Five of them fall in the six classes: **9,902**.
-  4. Drop records with any all-zero lead: the 15 of DRA O9 and the 2 SI of DRA O31. Fourteen of them fall in the six classes: **9,888 units**.
-- **Final counts:** SB 3,888, SR 1,825, AFIB 1,778, ST 1,562, AFL 438, SI 397.
+  3. Among records with identical signal arrays, keep the lowest JS id. In the six classes this drops five of the 13 part-1 pairs of DRA O10 (JS03005, JS03435, JS05900, JS06490, JS08755) and one SI pair (JS04771, identical to JS02561): **9,901**.
+  4. Drop records with any all-zero lead: the 15 of DRA O9 and the 2 SI of DRA O31. Fourteen of them fall in the six classes: **9,887 units**.
+- **Final counts:** SB 3,888, SR 1,825, AFIB 1,778, ST 1,562, AFL 438, SI 396.
+- **Script:** `python src/make_split.py` builds this list, asserts every count above, and writes `results/splits/` (§8.2).
 - **Label:** the `Diagnostics.xlsx` Rhythm value, applied to every crop of the record.
 - **Signal:** all 12 leads, the part-1 `.mat` `val` (µV). For the SI records, round(figshare CSV) (DRA O30).
 
 **8.2 Held-out data**
 
-- Sort the 9,888 units by JS id and split them with `sklearn.model_selection.train_test_split(test_size=0.2, stratify=label, random_state=4400)`. This gives a **test set of about 1,978 records** (about SB 778, SR 365, AFIB 356, ST 312, AFL 88, SI 79) and a development set of the rest.
+- Sort the 9,887 units by JS id and split them with `sklearn.model_selection.train_test_split(test_size=0.2, stratify=label, random_state=4400)`, so each class keeps its proportion in both parts. This gives a **test set of 1,978 records** (SB 778, SR 365, AFIB 356, ST 312, AFL 88, SI 79) and a **development set of 7,909** (SB 3,110, SR 1,460, AFIB 1,422, ST 1,250, AFL 350, SI 317).
+- The split and the 5 development folds are in `results/splits/` with their SHA-256 in `results/splits/SHA256SUMS`. Every class is within one record of its expected share in the test set, the development set and every fold.
 - The test-ID list is written to a file, and its SHA-256 is committed **before** any feature is computed or any model trained. That committed file, not the code, defines the split.
 - All feature design, model choice and tuning use the development set only, with 5-fold `StratifiedKFold` (seed 4400), the same folds for every model and window. Each record gives one crop per window, so a record is never in two folds. The 1D CNN's early stopping uses 10% of the training folds, never the held-out fold.
 - The Shaoxing test set is evaluated **once**, by one script, after the PRD freezes all models.
-- **External test (Ningbo):** the selected settings are refit on all 9,888 Shaoxing units, frozen, and only then is part 2 downloaded. Ningbo units are records with exactly one rhythm code that is one of the six classes, after the same exclusions as Shaoxing (zero leads, duplicates); the exact rule is in PRD §5 step C3. Ningbo is predicted **once** at every window and never used for tuning.
+- **External test (Ningbo):** the selected settings are refit on all 9,887 Shaoxing units, frozen, and only then is part 2 downloaded. Ningbo units are records with exactly one rhythm code that is one of the six classes, after the same exclusions as Shaoxing (zero leads, duplicates); the exact rule is in PRD §5 step C3. Ningbo is predicted **once** at every window and never used for tuning.
 
 **8.3 Windows, models and main quantities**
 
@@ -243,7 +245,7 @@ Part 3 (raw vs features):
 
 **8.6 Ways the analysis could mislead me, and the check for each**
 
-1. **Crops of one record in both training and evaluation.** *Check:* split by record before cropping, and group CV folds by record. Confirm no test JS id appears in the development set, and compute the SHA-256 of every unit's signal array to confirm all 9,888 are distinct.
+1. **One record in both training and evaluation.** *Check:* each record gives one crop per window and belongs to one fold. Confirm no test JS id appears in the development set, and compute the SHA-256 of every unit's signal array to confirm all 9,887 are distinct (`src/make_split.py` does both).
 2. **SB / SR / ST inflating the result.** *Check:* the main measure is R3 over SI, AFIB and AFL; SB/SR/ST are reported but do not count for or against the claim. M_HR is fit at every window.
 3. **Unequal effort on the two sides.** Part 3 could reflect which model was tuned harder. *Check:* M_feat and M_raw get the same development budget, at most 20 configurations each, declared in the PRD. The number of configurations tried is reported.
 4. **Choosing test crops.** *Check:* the crop is always the first T seconds, whatever it contains. Crops are never selected or filtered by content.
@@ -294,6 +296,7 @@ v1 → v2 (2026-11-25), written with PRD v0:
 - **§8.2, CV:** plain stratified 5-fold CV (one crop per record), with model settings selected on pooled out-of-fold R3.
 - **Why:** the team decided the window should be the start of the recording, as when a recording is stopped early, and wanted to see whether models trained at one site hold at another.
 - §2 parts 1–3 are unchanged. §9–11 remain not applicable.
+- **Amended the same day, when the split was built:** `src/make_split.py` found a 14th identical pair, two SI records (JS02561, JS04771) whose figshare CSVs are byte-identical. The DRA had checked duplicates only among part-1 `.mat` files, which do not include SI. Under the existing rule (keep the lower JS id) JS04771 is dropped: units 9,888 → 9,887, SI 397 → 396. The test set is unchanged in size (1,978).
 
 v0 → v1 (2026-11-25):
 
