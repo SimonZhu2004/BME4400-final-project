@@ -1,67 +1,28 @@
-# BME 4191 — Project 5
+# Dataset
 
-Your personal repository for Project 5.
+**A large scale 12-lead electrocardiogram database for arrhythmia study**,
+PhysioNet, version 1.0.0 (published 2022-08-24).
+https://physionet.org/content/ecg-arrhythmia/1.0.0/ —
+DOI [10.13026/wgex-er52](https://doi.org/10.13026/wgex-er52), CC BY 4.0.
 
-**The assignment text in Canvas is the authority for what to do and when. If this file disagrees with it, the assignment text wins.**
+Authors: Zheng J, Guo H, Chu H. Original paper: Zheng J, Chu H, Struppa D,
+et al. (2020), *Sci Rep* 10, doi:10.1038/s41598-020-59821-7.
 
-## Layout
+The database holds 45,152 12-lead ECG records in WFDB format, each a `.hea`
+header and a `.mat` signal file, with diagnoses coded in SNOMED-CT
+(`ConditionNames_SNOMED-CT.csv`). It is 5.1 GB uncompressed (2.3 GB as a ZIP).
 
-Keep to this layout; staff tools and graders look in these places.
+The records come from two hospitals:
 
-```text
-README.md                    this file
-AI_USE_APPENDIX.md           your record of material AI contributions (the file explains what to record)
-vcm/VCM.md                   your Versioned Claim Memo: section headings only; you fill it in
-dra/DRA.md                   your Data Reality Audit: section headings only
-prds/                        your PRD(s), in whatever form you choose
-src/                         all your code: .py modules and scripts (and notebooks, if you use any)
-tests/                       your verification checks
-results/                     outputs you commit as evidence: tables, figures, fitted model files
-report/                      your report
-drafts/                      scratch space, ignored by Git
-checks/check_environment.py  environment self-check
-environment.yml              the bme4191-p5 conda environment
-```
+| Part | Hospital | Records | Record IDs |
+|---|---|---|---|
+| 1 | Chapman University / Shaoxing People's Hospital | 10,247 | JS00001–JS10646 (with gaps) |
+| 2 | Ningbo First Hospital | 34,905 | JS10647–JS45551 |
 
-- Run your code from the repository root, with paths relative to it.
-- Your dataset stays outside this repository unless the assignment text says otherwise.
-- File names inside these folders are yours, except where the assignment text
-  names one.
-- If you use a coding agent, tell it to follow this layout; it can read this
-  file.
+PhysioNet does not say which record came from which hospital. The mapping in
+`results/source_data/ecg_arrhythmia_parts.csv` comes from the PhysioNet/CinC
+Challenge 2021 v1.0.3 release (DOI 10.13026/34va-7q14), which ships the same
+recordings split into `chapman_shaoxing` and `ningbo` folders.
 
-## Clone
-
-```text
-git clone https://github.com/BME4191/p5-<your-username>.git
-cd p5-<your-username>
-```
-
-(Git/SSO trouble? See `GitHub_Access_Fix.md` from Project 1 on Canvas.)
-
-## Environment
-
-```text
-conda env create -f environment.yml
-conda activate bme4191-p5
-python checks/check_environment.py
-```
-
-In VS Code: **Python: Select Interpreter** → `bme4191-p5`.
-
-## Commit, push, submit
-
-Commit and push your work as you go. To submit, as in Project 4:
-
-```text
-git push
-git log -1 --format=%H        # paste this SHA into Canvas
-```
-
-(In VS Code: Source Control → message → ✓ Commit → ↻ Sync Changes; the SHA
-is in the Timeline view or on GitHub.)
-
-## Getting updates
-
-If staff release material to this repository, commit your work first, then
-`git pull`.
+The raw data are not stored in this repository. See
+`results/source_data/ecg_arrhythmia_README.md` for download instructions.
