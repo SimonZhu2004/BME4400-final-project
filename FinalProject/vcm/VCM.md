@@ -22,12 +22,14 @@ The point of a VCM is not to be right. It is to make your reasoning specific eno
 
 Use the wording given in the assignment text.
 
-**Version (v1):** In 12-lead ECGs from one clinical location (Shaoxing People's Hospital), how does shortening the recording window from 10 s to 8, 6, 4 and 2 s change the classification of six cardiac rhythms — sinus rhythm, sinus bradycardia, sinus tachycardia, sinus irregularity, atrial fibrillation and atrial flutter — and do models trained on the raw ECG signal lose less than models trained on a table of extracted features?
+**Version (v2):** In 12-lead ECGs from one clinical location (Shaoxing People's Hospital), how does using only the first 8, 6, 4 or 2 s of the recording, instead of the full 10 s, change the classification of six cardiac rhythms — sinus rhythm, sinus bradycardia, sinus tachycardia, sinus irregularity, atrial fibrillation and atrial flutter — and do models trained on the raw ECG signal lose less than models trained on a table of extracted features? Do the same patterns hold when models trained on Shaoxing are tested on a second site (Ningbo First Hospital)?
+
+(The v1 wording is quoted in §12.)
 
 **Source:**
 - PhysioNet, *A large scale 12-lead electrocardiogram database for arrhythmia study*, v1.0.0 — https://physionet.org/content/ecg-arrhythmia/1.0.0/. Part 1 = the 10,247 Chapman-Shaoxing records (Shaoxing People's Hospital; `dra/DRA.md` §2).
 - The 399 sinus-irregularity records, which part 1 lacks, come from the original 10,646-record release of the same data on figshare (collection *ChapmanECG*, 4560497). Part 1 is that release minus those 399 records, and its signals equal the figshare signals rounded to whole µV (DRA O22, O24, O30, O31).
-- Part 2 (Ningbo First Hospital, 34,905 records) is sealed and has not been examined.
+- Part 2 (Ningbo First Hospital, 34,905 records) is sealed and has not been examined. It is used only as an external test set, downloaded after the models are frozen (§8.2).
 
 **Rhythm classes.** In the data's own labels the six main rhythms are SR (sinus rhythm), SB (sinus bradycardia), ST (sinus tachycardia), SA (sinus irregularity), AFIB (atrial fibrillation) and AF (atrial flutter). Below, SI = sinus irregularity and AFL = atrial flutter.
 
@@ -67,6 +69,8 @@ The claim has three parts:
 2. **Which rhythm loses most.** From 10 s to 2 s, SI loses the most recall, AFL the least, and AFIB is in between (drop_SI > drop_AFIB > drop_AFL).
 3. **Raw signal vs features.** At 10 s the two main models are close. As the window shortens, the raw-signal model loses less than the feature-table model, so the gap (raw − feature) grows.
 
+At Ningbo I expect parts 1–3 to hold in direction, with lower R3 overall than at Shaoxing. This expectation is reported but is not one of the three parts.
+
 Why I expect this:
 
 - **SI** is defined by beat-to-beat variation in RR intervals with normal P waves. At ~70 bpm a 2-s window holds two or three beats and a 4-s window about five, so there is little variation to see. In short windows SI should look like SR.
@@ -90,8 +94,9 @@ _What is the tempting stronger statement that your evidence will not support?_
 The evidence will **not** support:
 
 - that a **short strip from a wearable or single-lead device** is enough. This project keeps all 12 leads; it varies only the window length. Fewer leads is a separate question and is out of scope.
-- anything about **windows shorter than 2 s**.
-- that the results apply to **other hospitals, devices or populations**, including Ningbo (part 2, sealed), or to ambulatory monitoring.
+- anything about **windows shorter than 2 s**, or windows taken from elsewhere in the record (only the first T s is used).
+- that the results apply to **hospitals, devices or populations other than Shaoxing and Ningbo**, or to ambulatory monitoring.
+- **why** performance differs between Shaoxing and Ningbo. Patients, devices and labelling practice all differ between sites, and this design cannot separate them.
 - that **raw-signal models are better than feature models in general**. The comparison is between the specific models and the one feature set declared in §8, each with a fixed development budget.
 - that the raw-signal model **uses physiological information** such as flutter waves. Without separate interpretation work, its performance only shows association within this dataset.
 - that SB / SR / ST are **recognised from their physiology**. Their labels are rate thresholds.
@@ -116,6 +121,12 @@ Unknowns about the design:
 - **How many R peaks a short crop holds.** At 47 bpm (slow SB), a 2-s crop can contain a single R peak. The feature models must then work with missing rate and RR features.
 - **Test-set size for small classes:** about 79 SI and 88 AFL. Per-class recall will have wide intervals, which may make parts 2 and 3 impossible to settle.
 
+Unknowns about Ningbo (part 2, not yet examined):
+
+- **How many records of each class it has**, and whether SI appears at all. In part 1, SI was removed from the PhysioNet release (DRA U1); part 2 may differ.
+- **Whether its labels mean the same thing.** Ningbo labels come only from the header SNOMED codes, whereas Shaoxing labels come from the figshare Rhythm field. A different hospital may also have labelled rhythms differently.
+- **Whether its records have the same format and quality** (12 leads × 5,000 samples at 500 Hz, zero leads, duplicates).
+
 ## 6. Revision trigger
 
 _What specific evidence or reasoning would make you change your claim?_
@@ -133,7 +144,7 @@ I will revise the claim (before any test-set evaluation, if the trigger occurs d
 _One sentence: why are you committing this claim state using only your own background knowledge, before consulting peers, AI, literature, or the dataset?_
 
 **Where this version came from:**
-- **The question** (compare window lengths of 2, 4, 6, 8 and 10 s, and train on a feature table vs on the raw ECG) was chosen by our team on 2026-11-25.
+- **The question** (compare window lengths of 2, 4, 6, 8 and 10 s, and train on a feature table vs on the raw ECG) was chosen by our team on 2026-11-25. In v2 the team fixed the window as the first T s, kept 20% of Shaoxing as the test set, and added Ningbo as an external test site.
 - **The model list** follows a teammate's draft plan (`lead_duration_sweep_idea.md`): logistic regression, gradient-boosted trees and an MLP on features; MiniRocket and a 1D CNN on the raw signal; heart rate only as the floor. That plan also swept the number of leads; we kept the window sweep and dropped the lead sweep.
 - **From the earlier project and its DRA:** the dataset, the six classes, the restored SI records, and the finding that SB / SR / ST labels are rate thresholds. That finding is why the claim is stated on SI, AFIB and AFL.
 - **AI (Claude Code):** drafted this memo's text and the physiology-based expectations in §2 (which rhythm needs how many beats). These are to be checked against our own understanding before the memo is committed as ours (AI-use appendix).
@@ -161,16 +172,13 @@ Written 2026-11-25. No feature has been computed and no model fitted.
 
 - Sort the 9,888 units by JS id and split them with `sklearn.model_selection.train_test_split(test_size=0.2, stratify=label, random_state=4400)`. This gives a **test set of about 1,978 records** (about SB 778, SR 365, AFIB 356, ST 312, AFL 88, SI 79) and a development set of the rest.
 - The test-ID list is written to a file, and its SHA-256 is committed **before** any feature is computed or any model trained. That committed file, not the code, defines the split.
-- All feature design, model choice and tuning use the development set only:
-  - feature-table models and MiniRocket: 5-fold `StratifiedGroupKFold`, grouped by record, so all crops of one record stay in one fold;
-  - 1D CNN: one stratified train / validation split of the development records.
-- The test set is evaluated **once**, by one script, after the PRD freezes all models.
+- All feature design, model choice and tuning use the development set only, with 5-fold `StratifiedKFold` (seed 4400), the same folds for every model and window. Each record gives one crop per window, so a record is never in two folds. The 1D CNN's early stopping uses 10% of the training folds, never the held-out fold.
+- The Shaoxing test set is evaluated **once**, by one script, after the PRD freezes all models.
+- **External test (Ningbo):** the selected settings are refit on all 9,888 Shaoxing units, frozen, and only then is part 2 downloaded. Ningbo units are records with exactly one rhythm code that is one of the six classes, after the same exclusions as Shaoxing (zero leads, duplicates); the exact rule is in PRD §5 step C3. Ningbo is predicted **once** at every window and never used for tuning.
 
 **8.3 Windows, models and main quantities**
 
-- **Windows:** T ∈ {10, 8, 6, 4, 2} s.
-  - Training: random crops of length T from development records.
-  - Testing: **one fixed crop per test record, the middle T seconds.** Crops are not averaged at test time, since that would use more than T seconds.
+- **Windows:** T ∈ {10, 8, 6, 4, 2} s. The crop is the **first T seconds** of each record (samples 0 to 500·T), for training, validation and testing, at both sites. A separate set of models is trained at every T. All processing uses only the crop.
 - **Feature table:** computed once per lead per crop.
   - Groups: rate (60 / median RR); RR variability (SDNN, RMSSD, pNN50, RR range, coefficient of variation); P wave (fraction of beats with a detected P wave, P amplitude, PR interval and its variability); atrial spectrum (power 4–9 Hz, dominant frequency, peak sharpness near 4–6 Hz); QRS width and amplitude.
   - RR-variability features are missing when a crop has fewer than 3 R peaks.
@@ -197,8 +205,11 @@ Written 2026-11-25. No feature has been computed and no model fitted.
   - **Part 3, raw vs features:** G(T) = R3(M_raw, T) − R3(M_feat, T), and the change **ΔG = G(2 s) − G(10 s)**.
 - Always reported alongside: all six per-class recalls for every model and window, macro recall over all six classes, and the gain over M_HR.
 - **Secondary models** are reported with the same quantities. They do not count in §8.4, but if they point the opposite way from the main pair I say so in §10.
+- **At Ningbo**, the same quantities are computed, plus the site gap R3_Shaoxing-test(model, T) − R3_Ningbo(model, T).
 
 **8.4 What supports, weakens or refutes the claim**
+
+The Shaoxing test set decides parts 1–3. Ningbo is judged by the same rules and reported beside it; if a class has fewer than 30 Ningbo units, it is left out of Ningbo's R3 and reported on its own. If the two sites disagree, both are reported and the claim is bounded to the site where it held.
 
 Part 1 (window loss):
 - **Supports:** for both M_feat and M_raw, R3 decreases from 10 → 8 → 6 → 4 → 2 s (point estimates; equal values count as no decrease), and the 95% interval of L(model, 2 s) lies above 0.
@@ -234,10 +245,11 @@ Part 3 (raw vs features):
 1. **Crops of one record in both training and evaluation.** *Check:* split by record before cropping, and group CV folds by record. Confirm no test JS id appears in the development set, and compute the SHA-256 of every unit's signal array to confirm all 9,888 are distinct.
 2. **SB / SR / ST inflating the result.** *Check:* the main measure is R3 over SI, AFIB and AFL; SB/SR/ST are reported but do not count for or against the claim. M_HR is fit at every window.
 3. **Unequal effort on the two sides.** Part 3 could reflect which model was tuned harder. *Check:* M_feat and M_raw get the same development budget, at most 20 configurations each, declared in the PRD. The number of configurations tried is reported.
-4. **Choosing test crops.** *Check:* the test crop is always the middle T seconds, whatever it contains. Crops are never selected or filtered by content.
+4. **Choosing test crops.** *Check:* the crop is always the first T seconds, whatever it contains. Crops are never selected or filtered by content.
 5. **Tuning on the test set.** *Check:* the test-ID file and its hash are committed before any feature or model code runs. The single test evaluation is a separate commit that comes after the PRD that freezes the models. The Git log shows the order.
-6. **Too many models and windows.** Six models × five windows invites picking the comparison that looks best. *Check:* only the main pair (M_feat, M_raw) and the quantities in §8.3 decide the claim, fixed here before any result.
-7. **Demographic shortcut.** *Check:* no model is given age or sex.
+6. **Ningbo influencing the models.** *Check:* part 2 is downloaded only after the all-Shaoxing model manifest is committed, with the download script's `--unseal-part2` flag. Model hashes are checked against the manifest before Ningbo is predicted.
+7. **Too many models and windows.** Six models × five windows invites picking the comparison that looks best. *Check:* only the main pair (M_feat, M_raw) and the quantities in §8.3 decide the claim, fixed here before any result.
+8. **Demographic shortcut.** *Check:* no model is given age or sex.
 
 **8.7 Additional items the claim needs**
 
@@ -249,7 +261,7 @@ Part 3 (raw vs features):
   - Zero-lead records: excluded (§8.1). This removes 7 of the 445 AFL records; I will report this.
   - Age and sex differ by class: not used as features.
   - Class imbalance: class-balanced weighting, and macro recall rather than accuracy.
-- **Reach beyond the data:** the claim is limited to 12-lead resting ECGs from Shaoxing. Saying the same about short strips in general would need other hospitals and devices, and saying it about wearables would need fewer leads. Neither is part of this project.
+- **Reach beyond the data:** the claim is decided on 12-lead resting ECGs from Shaoxing, with Ningbo as one external site. Saying the same about short strips in general would need more hospitals and devices, and saying it about wearables would need fewer leads. Neither is part of this project.
 
 ## 9. Observed evidence
 
@@ -272,6 +284,15 @@ _How would someone else confirm this?_
 ## 12. Revision rationale
 
 _What changed since the previous version, and what caused it?_
+
+v1 → v2 (2026-11-25), written with PRD v0:
+
+- **§1:** the v1 wording read: *"…how does shortening the recording window from 10 s to 8, 6, 4 and 2 s change the classification of six cardiac rhythms … and do models trained on the raw ECG signal lose less than models trained on a table of extracted features?"* v2 specifies the **first** T seconds and adds the Ningbo question.
+- **§8.3, crop:** v1 trained on random crops and tested on the middle T s. v2 uses the first T s for training and testing. One crop per record means no crop augmentation and no grouping problem in CV.
+- **§8.2, external test:** Ningbo (part 2) is unsealed after the models are frozen and used once as an external test set. §4 and §5 are updated to match.
+- **§8.2, CV:** plain stratified 5-fold CV (one crop per record), with model settings selected on pooled out-of-fold R3.
+- **Why:** the team decided the window should be the start of the recording, as when a recording is stopped early, and wanted to see whether models trained at one site hold at another.
+- §2 parts 1–3 are unchanged. §9–11 remain not applicable.
 
 v0 → v1 (2026-11-25):
 
