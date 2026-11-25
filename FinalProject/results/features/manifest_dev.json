@@ -1,0 +1,149 @@
+{
+  "split": "dev",
+  "units": 7909,
+  "windows": [
+    2,
+    4,
+    6,
+    8,
+    10
+  ],
+  "files": {
+    "T2": {
+      "path": "/Users/jinzemao/bme4191_ecg/derived/features/features_dev_T2.csv",
+      "sha256": "e9492c55cf7c33662236801cfb6afca9b758569d5cb95381271e810e8a12dd15",
+      "rows": 7909,
+      "nan_counts": {
+        "hr": 1427,
+        "rr_sdnn": 5318,
+        "rr_rmssd": 5318,
+        "rr_pnn50": 5318,
+        "rr_range": 5318,
+        "rr_cv": 5318,
+        "p_consistency_II": 1427,
+        "p_consistency_V1": 1427,
+        "af_power_ratio_II": 0,
+        "af_dom_freq_II": 0,
+        "af_peak_ratio_II": 0,
+        "af_power_ratio_V1": 0,
+        "af_dom_freq_V1": 0,
+        "af_peak_ratio_V1": 0,
+        "r_amp_II": 7,
+        "r_amp_V1": 7
+      },
+      "rpeaks_lt2": 1427,
+      "rpeaks_lt3": 5318
+    },
+    "T4": {
+      "path": "/Users/jinzemao/bme4191_ecg/derived/features/features_dev_T4.csv",
+      "sha256": "02edb9d616e4ec2eea7159e78394ecd2147510922a4421a68170d7eb7c420a9e",
+      "rows": 7909,
+      "nan_counts": {
+        "hr": 9,
+        "rr_sdnn": 54,
+        "rr_rmssd": 54,
+        "rr_pnn50": 54,
+        "rr_range": 54,
+        "rr_cv": 54,
+        "p_consistency_II": 9,
+        "p_consistency_V1": 9,
+        "af_power_ratio_II": 0,
+        "af_dom_freq_II": 0,
+        "af_peak_ratio_II": 0,
+        "af_power_ratio_V1": 0,
+        "af_dom_freq_V1": 0,
+        "af_peak_ratio_V1": 0,
+        "r_amp_II": 8,
+        "r_amp_V1": 8
+      },
+      "rpeaks_lt2": 9,
+      "rpeaks_lt3": 54
+    },
+    "T6": {
+      "path": "/Users/jinzemao/bme4191_ecg/derived/features/features_dev_T6.csv",
+      "sha256": "e9ada4d3d2fdbf891d9c3359d73e16f18d8ef1db29f6cb8ddbb248d0bb53124b",
+      "rows": 7909,
+      "nan_counts": {
+        "hr": 8,
+        "rr_sdnn": 11,
+        "rr_rmssd": 11,
+        "rr_pnn50": 11,
+        "rr_range": 11,
+        "rr_cv": 11,
+        "p_consistency_II": 8,
+        "p_consistency_V1": 8,
+        "af_power_ratio_II": 0,
+        "af_dom_freq_II": 0,
+        "af_peak_ratio_II": 0,
+        "af_power_ratio_V1": 0,
+        "af_dom_freq_V1": 0,
+        "af_peak_ratio_V1": 0,
+        "r_amp_II": 6,
+        "r_amp_V1": 6
+      },
+      "rpeaks_lt2": 8,
+      "rpeaks_lt3": 11
+    },
+    "T8": {
+      "path": "/Users/jinzemao/bme4191_ecg/derived/features/features_dev_T8.csv",
+      "sha256": "8b89c15afedea04ac4517920d88a099535064917ccf92cb9d1c30f36120301c6",
+      "rows": 7909,
+      "nan_counts": {
+        "hr": 6,
+        "rr_sdnn": 8,
+        "rr_rmssd": 8,
+        "rr_pnn50": 8,
+        "rr_range": 8,
+        "rr_cv": 8,
+        "p_consistency_II": 6,
+        "p_consistency_V1": 6,
+        "af_power_ratio_II": 0,
+        "af_dom_freq_II": 0,
+        "af_peak_ratio_II": 0,
+        "af_power_ratio_V1": 0,
+        "af_dom_freq_V1": 0,
+        "af_peak_ratio_V1": 0,
+        "r_amp_II": 4,
+        "r_amp_V1": 4
+      },
+      "rpeaks_lt2": 6,
+      "rpeaks_lt3": 8
+    },
+    "T10": {
+      "path": "/Users/jinzemao/bme4191_ecg/derived/features/features_dev_T10.csv",
+      "sha256": "3004d3c6cff51aa31218af6e7ef4742566e90dc106274dfdcd1f7d89e88ffe02",
+      "rows": 7909,
+      "nan_counts": {
+        "hr": 6,
+        "rr_sdnn": 6,
+        "rr_rmssd": 6,
+        "rr_pnn50": 6,
+        "rr_range": 6,
+        "rr_cv": 6,
+        "p_consistency_II": 6,
+        "p_consistency_V1": 6,
+        "af_power_ratio_II": 0,
+        "af_dom_freq_II": 0,
+        "af_peak_ratio_II": 0,
+        "af_power_ratio_V1": 0,
+        "af_dom_freq_V1": 0,
+        "af_peak_ratio_V1": 0,
+        "r_amp_II": 4,
+        "r_amp_V1": 4
+      },
+      "rpeaks_lt2": 6,
+      "rpeaks_lt3": 6
+    }
+  },
+  "elapsed_s": 25,
+  "workers": 7,
+  "git_commit": "366c087545a36024146a5682b953272ad4bd56be",
+  "versions": {
+    "python": "3.13.18",
+    "numpy": "2.3.5",
+    "scipy": "1.18.1",
+    "neurokit2": "0.3.0",
+    "scikit-learn": "1.7.2"
+  },
+  "platform": "macOS-27.0-arm64-arm-64bit-Mach-O"
+}

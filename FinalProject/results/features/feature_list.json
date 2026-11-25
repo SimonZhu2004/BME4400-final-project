@@ -1,0 +1,47 @@
+{
+  "features": [
+    "hr",
+    "rr_sdnn",
+    "rr_rmssd",
+    "rr_pnn50",
+    "rr_range",
+    "rr_cv",
+    "p_consistency_II",
+    "p_consistency_V1",
+    "af_power_ratio_II",
+    "af_dom_freq_II",
+    "af_peak_ratio_II",
+    "af_power_ratio_V1",
+    "af_dom_freq_V1",
+    "af_peak_ratio_V1",
+    "r_amp_II",
+    "r_amp_V1"
+  ],
+  "definitions": {
+    "hr": "60000 / mean RR (ms), lead II R peaks; NaN if < 2 R peaks",
+    "rr_sdnn": "SD of RR intervals (ms, ddof=1); NaN if < 3 R peaks",
+    "rr_rmssd": "root mean square of successive RR differences (ms); NaN if < 3 R peaks",
+    "rr_pnn50": "fraction of successive RR differences > 50 ms; NaN if < 3 R peaks",
+    "rr_range": "max RR - min RR (ms); NaN if < 3 R peaks",
+    "rr_cv": "rr_sdnn / mean RR; NaN if < 3 R peaks",
+    "p_consistency": "median Pearson correlation, over all pairs of beats, of the cleaned signal from 250 ms to 60 ms before each lead-II R peak (beats whose region starts before the crop are skipped); NaN if < 2 such beats",
+    "af_power_ratio": "Welch power 4-9 Hz / power 1-40 Hz after masking 120 ms around each R peak",
+    "af_dom_freq": "frequency of maximum Welch power in 3-12 Hz (Hz), same masked signal",
+    "af_peak_ratio": "max Welch power in 4-6 Hz / median Welch power in 3-12 Hz, same masked signal",
+    "r_amp": "median cleaned amplitude at the lead-II R peak times (µV); NaN if no R peak"
+  },
+  "leads": [
+    "II",
+    "V1"
+  ],
+  "fs": 500,
+  "crop": "first T s, samples [0, 500*T)",
+  "windows": [
+    2,
+    4,
+    6,
+    8,
+    10
+  ],
+  "cleaning": "neurokit2.ecg_clean(method='neurokit') per lead; R peaks: neurokit2.ecg_peaks(method='neurokit') on cleaned lead II"
+}

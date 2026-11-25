@@ -182,8 +182,8 @@ Written 2026-11-25. No feature has been computed and no model fitted.
 
 - **Windows:** T ∈ {10, 8, 6, 4, 2} s. The crop is the **first T seconds** of each record (samples 0 to 500·T), for training, validation and testing, at both sites. A separate set of models is trained at every T. All processing uses only the crop.
 - **Feature table:** computed once per lead per crop.
-  - Groups: rate (60 / median RR); RR variability (SDNN, RMSSD, pNN50, RR range, coefficient of variation); P wave (fraction of beats with a detected P wave, P amplitude, PR interval and its variability); atrial spectrum (power 4–9 Hz, dominant frequency, peak sharpness near 4–6 Hz); QRS width and amplitude.
-  - RR-variability features are missing when a crop has fewer than 3 R peaks.
+  - 16 features: rate (60 / mean RR); RR variability (SDNN, RMSSD, pNN50, RR range, coefficient of variation); P-wave consistency (how similar the region before each QRS is from beat to beat), atrial spectrum (power 4–9 Hz, dominant frequency, peak sharpness near 4–6 Hz) and R amplitude, each in leads II and V1. Exact definitions in PRD §5 A3 and `results/features/feature_list.json`.
+  - RR-variability features are missing when a crop has fewer than 3 R peaks; heart rate and P-wave consistency when it has fewer than 2.
   - Feature selection, if any, is done inside each CV fold.
 - **Models, each fit separately at every T:**
 
@@ -287,6 +287,11 @@ _How would someone else confirm this?_
 ## 12. Revision rationale
 
 _What changed since the previous version, and what caused it?_
+
+**Feature-table amendments (2026-11-25, development set only, no model fitted; PRD amendments 2–4):**
+- **Heart rate is 60 / mean RR**, not the median, because `VentricularRate` is a mean rate. With the median, 90.1% of development units were within 5 bpm of it at 10 s; with the mean, 94.2%.
+- **P-wave and QRS delineation features were dropped.** NeuroKit's DWT delineation gave implausible values on this data (a "P wave" in nearly every AFIB beat; QRS width 150–200 ms) and refuses crops shorter than 4 s. They are replaced by P-wave consistency in leads II and V1, which separates sinus rhythms (~0.95), AFL (~0.5) and AFIB (~0) at both 10 s and 2 s. The feature table goes from 24 to 16 features.
+- **§6 trigger reached:** heart rate agrees with `VentricularRate` within 5 bpm for 94.2% of development units at 10 s, below the 95% in §6. Sinus classes agree for 94–99%; AFIB 88% and AFL 86%, where the detector misses some beats; some SB records get one extra beat. None of eight NeuroKit R-peak detectors does better (`results/features/qc_rpeak_detectors.csv`). **Decision (team, 2026-11-25): proceed.** The trigger's second branch applies — the measurement could not be fixed, so the comparator is narrowed: M_HR is a floor built on our heart-rate estimate, which disagrees with `VentricularRate` by more than 5 bpm in 12–14% of AFIB / AFL development units, and every statement about M_HR or the gain over it says so. The 95% threshold is not lowered; the check is recorded as failed (PRD amendment 5).
 
 v1 → v2 (2026-11-25), written with PRD v0:
 

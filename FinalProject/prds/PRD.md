@@ -7,6 +7,16 @@ Do not delete a section that does not apply. Keep the heading and write:
 
 > _Not applicable — [reason]._
 
+**Amendments** (each made before the change was run on anything but the development set):
+
+| # | Date | Section | Change | Reason and evidence |
+|---|---|---|---|---|
+| 1 | 2026-11-25 | §3, §4, §5 A1 | Shaoxing units 9,888 → 9,887 | `src/make_split.py` found a 14th identical pair (SI JS02561 = JS04771); JS04771 dropped by the existing duplicate rule (VCM v2 §12) |
+| 2 | 2026-11-25 | §5 A3 | `hr` = 60000 / **mean** RR (was median) | `VentricularRate` is a mean rate; with the median, only 90.1% of development units were within 5 bpm of it at 10 s (AFIB 63%, AFL 69%); with the mean, 94.2% |
+| 3 | 2026-11-25 | §5 A3 | DWT delineation features (P-wave fraction, P amplitude, PR median and SD, QRS width; per lead) replaced by `p_consistency` per lead: **24 → 16 features** | On the development set the DWT output was implausible: a P wave was "found" in nearly every AFIB beat (median `p_frac` 1.00), median QRS width 150–200 ms, only 52% of lead-II PR intervals in 80–300 ms. NeuroKit's `ecg_delineate` also refuses crops shorter than 4 s. `p_consistency` separates the classes at 10 s and 2 s (lead II median: sinus classes 0.89–0.97, AFL 0.49–0.50, AFIB −0.02 to 0.05; `results/features/qc_dev.json`) |
+| 4 | 2026-11-25 | §4 item 5 | Heart-rate check **fails**: 94.2% < 95% | Eight NeuroKit R-peak detectors compared on 1,800 development units (`src/qc_rpeak_detectors.py`, `results/features/qc_rpeak_detectors.csv`); the default `neurokit` detector is best (94.1% on the sample). Errors: one extra peak in some SB records, missed peaks in some AFIB / AFL records. An amplitude filter on R peaks made it worse at every threshold tried (0.3–0.6 × median). |
+| 5 | 2026-11-25 | §4 item 5, §9 | **Decision on amendment 4: proceed.** The check stays recorded as failed (94.2% < 95%); the 95% threshold is not lowered. The team accepts the deviation and narrows what M_HR can show (VCM §6) | The shortfall is in AFIB (87.8%) and AFL (86.0%), which the claim separates mainly by RR irregularity and atrial activity, not by rate; sinus classes agree for 94–99%. No available detector does better. Consequence: wherever M_HR or the gain over M_HR is reported, it is stated that heart rate disagrees with `VentricularRate` by more than 5 bpm in 12–14% of AFIB / AFL development units, so M_HR is a floor built on our heart-rate estimate, not on the recorded rate |
+
 ---
 
 ## 1. Purpose and evidence need
@@ -25,7 +35,7 @@ Do not delete a section that does not apply. Keep the heading and write:
 
 **This analysis does not establish:**
 - anything about fewer leads, windows below 2 s, other rhythms, or windows taken from elsewhere in the record (only the first T s is used).
-- that raw-signal models beat feature models in general: one CNN, one MiniRocket and one 24-feature table are compared.
+- that raw-signal models beat feature models in general: one CNN, one MiniRocket and one 16-feature table are compared.
 - why performance differs between sites. A drop at Ningbo can come from different patients, devices or labelling practice; this analysis cannot separate them.
 
 **Relation to the VCM.** VCM v1 already fits a separate model at every window and holds out 20% of Shaoxing. This PRD changes three things, which **VCM v2 must record before any code in §5 runs**: the windows are the **first** T s (not random crops in training and the middle crop in testing); Ningbo is added as an external test set; MiniRocket is a secondary model.
@@ -100,7 +110,7 @@ Before any model result is interpreted, these must reproduce exactly (tolerance 
 4. SB / SR / ST vs the 60 / 100 bpm rule on `VentricularRate`: 7,253 of 7,283 agree (DRA O25).
 
 And within tolerance:
-5. Heart rate from §5 step A3 at T = 10 s is within 5 bpm of `VentricularRate` for at least 95% of Shaoxing development units (VCM v2 §6).
+5. Heart rate from §5 step A3 at T = 10 s is within 5 bpm of `VentricularRate` for at least 95% of Shaoxing development units (VCM v2 §6). **Result 2026-11-25: 94.2% — failed; proceeding under amendment 5.** Reproduced by `python src/feature_qc.py` (`results/features/qc_dev.json`).
 
 If any check fails: stop and diagnose (§13). Nothing downstream is run.
 
@@ -115,11 +125,14 @@ A2. **Folds.** Same script: on the development set sorted by JS id, `StratifiedK
 A3. **Features** (`src/features.py`), computed from the crop:
 - Preprocessing: `neurokit2.ecg_clean(signal, sampling_rate=500, method="neurokit")` per lead.
 - R peaks: `neurokit2.ecg_peaks(lead II, sampling_rate=500, method="neurokit")`.
-- **Rate and RR (lead II):** heart rate = 60 / median RR (needs ≥ 2 R peaks); SDNN, RMSSD, pNN50, RR range, coefficient of variation = SDNN / mean RR (need ≥ 3 R peaks). Otherwise NaN.
-- **P wave (leads II and V1):** `neurokit2.ecg_delineate(method="dwt")`. Fraction of beats with a detected P peak; median P amplitude; median PR interval; SD of PR intervals (needs ≥ 3 beats). Otherwise NaN.
-- **Atrial spectrum (leads II and V1):** replace 120 ms centred on each R peak by linear interpolation. Welch PSD with `nperseg = min(1000, len(crop))`. Features: power 4–9 Hz / power 1–40 Hz; dominant frequency in 3–12 Hz; peak power / mean power in 4–6 Hz.
-- **QRS (leads II and V1):** median QRS width (delineation); median R amplitude.
-- 24 features in total. Names and order are fixed in `src/features.py` and written to `results/features/feature_list.json`.
+- **Rate and RR (lead II):** heart rate = 60000 / **mean** RR in ms (needs ≥ 2 R peaks); SDNN, RMSSD, pNN50, RR range, coefficient of variation = SDNN / mean RR (need ≥ 3 R peaks). Otherwise NaN. (Amendment 2.)
+- **P-wave consistency (leads II and V1):** for every lead-II R peak whose region starts inside the crop, take the cleaned signal from 250 ms to 60 ms before the R peak; `p_consistency` = median Pearson correlation over all pairs of these segments. NaN if fewer than 2 segments. High when every beat has the same P wave (sinus), near 0 when there is none (AFIB). (Amendment 3; replaces the DWT P-wave and QRS features.)
+- **Atrial spectrum (leads II and V1):** replace 120 ms centred on each R peak by linear interpolation. Welch PSD with `nperseg = min(1000, len(crop))`. Features: power 4–9 Hz / power 1–40 Hz; dominant frequency in 3–12 Hz; maximum power in 4–6 Hz / **median power in 3–12 Hz** (exact form of "peak sharpness").
+- **R amplitude (leads II and V1):** median cleaned amplitude at the lead-II R peak times.
+- **16 features in total**, in this order: `hr, rr_sdnn, rr_rmssd, rr_pnn50, rr_range, rr_cv, p_consistency_II, p_consistency_V1, af_power_ratio_II, af_dom_freq_II, af_peak_ratio_II, af_power_ratio_V1, af_dom_freq_V1, af_peak_ratio_V1, r_amp_II, r_amp_V1`. Names, order and definitions are fixed in `src/features.py` and written to `results/features/feature_list.json`.
+- One set of R peaks (lead II) is used for every feature of a crop.
+- Run: `python src/features.py --split dev` (Stage A; about 4 minutes on 7 cores). `--split test` only at step B3.
+- QC (development only): `python src/feature_qc.py` writes `results/features/qc_dev.json` (heart-rate check, R-peak counts, NaN shares, class medians).
 - Feature tables are saved under `DATA/derived/` (outside the repository).
 
 A4. **Models.** All balanced across classes, no age or sex, seed 4400.
@@ -127,9 +140,9 @@ A4. **Models.** All balanced across classes, no age or sex, seed 4400.
 | Model | Input | Library and class | Tuning grid (Stage A, per T) |
 |---|---|---|---|
 | M_HR (floor) | heart rate only | `sklearn.ensemble.HistGradientBoostingClassifier(class_weight="balanced")` | none; defaults |
-| **M_feat (main)** | 24 features, NaN passed through | `HistGradientBoostingClassifier(class_weight="balanced")` | `learning_rate` ∈ {0.05, 0.1}, `max_leaf_nodes` ∈ {15, 31}, `max_iter` ∈ {200, 400} (8) |
-| LR (secondary) | 24 features | `Pipeline(SimpleImputer(strategy="median"), StandardScaler(), LogisticRegression(class_weight="balanced", max_iter=5000))` | `C` ∈ {0.01, 0.1, 1, 10} (4) |
-| MLP (secondary) | 24 features | `Pipeline(SimpleImputer(strategy="median"), StandardScaler(), MLPClassifier(early_stopping=True, max_iter=500))`; training rows resampled to equal class counts (`sklearn.utils.resample`), since `MLPClassifier` has no class weights | `hidden_layer_sizes` ∈ {(64,), (64, 32)}, `alpha` ∈ {1e-4, 1e-3} (4) |
+| **M_feat (main)** | 16 features, NaN passed through | `HistGradientBoostingClassifier(class_weight="balanced")` | `learning_rate` ∈ {0.05, 0.1}, `max_leaf_nodes` ∈ {15, 31}, `max_iter` ∈ {200, 400} (8) |
+| LR (secondary) | 16 features | `Pipeline(SimpleImputer(strategy="median"), StandardScaler(), LogisticRegression(class_weight="balanced", max_iter=5000))` | `C` ∈ {0.01, 0.1, 1, 10} (4) |
+| MLP (secondary) | 16 features | `Pipeline(SimpleImputer(strategy="median"), StandardScaler(), MLPClassifier(early_stopping=True, max_iter=500))`; training rows resampled to equal class counts (`sklearn.utils.resample`), since `MLPClassifier` has no class weights | `hidden_layer_sizes` ∈ {(64,), (64, 32)}, `alpha` ∈ {1e-4, 1e-3} (4) |
 | **M_raw (main)** | raw 12-lead crop at 250 Hz | PyTorch 1D CNN (below) | learning rate ∈ {1e-3, 3e-4} (2) |
 | MiniRocket (secondary) | raw 12-lead crop at 250 Hz | `sktime.transformations.panel.rocket.MiniRocketMultivariate(random_state=4400)` → `StandardScaler` → `RidgeClassifierCV(alphas=np.logspace(-3, 3, 10), class_weight="balanced")` | none (alpha chosen internally) |
 
@@ -230,7 +243,9 @@ Under `results/` (committed):
 |---|---|
 | `splits/shaoxing_test_ids.csv` (+ `.sha256`) | `record, label` |
 | `splits/shaoxing_dev_folds.csv` | `record, label, fold` |
-| `features/feature_list.json` | feature names and order |
+| `features/feature_list.json` | feature names, order and definitions |
+| `features/manifest_dev.json`, `features/manifest_test.json` | feature-table hashes, row counts, NaN counts, versions |
+| `features/qc_dev.json`, `features/qc_rpeak_detectors.csv` | feature QC (amendments 2–4) |
 | `cv/oof_predictions.csv` | `record, fold, model, config, T, true, pred, p_SR … p_AFL` |
 | `cv/metrics.csv` | `model, config, T, fold (or "pooled"), metric, value` |
 | `cv/selected_configs.json` | selected configuration per model and T |
