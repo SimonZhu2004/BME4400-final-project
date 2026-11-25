@@ -204,6 +204,7 @@ Written 2026-11-25. No feature has been computed and no model fitted.
   - **Part 2, per-class loss:** drop_c = recall_c(M_feat, 10 s) − recall_c(M_feat, 2 s), for c ∈ {SI, AFIB, AFL}.
   - **Part 3, raw vs features:** G(T) = R3(M_raw, T) − R3(M_feat, T), and the change **ΔG = G(2 s) − G(10 s)**.
 - Always reported alongside: all six per-class recalls for every model and window, macro recall over all six classes, and the gain over M_HR.
+- **F1, secondary:** per-class F1, F1-3 (macro F1 over SI, AFIB and AFL) and macro F1 over all six, with the same bootstrap intervals. Recall ignores false positives (labelling many SR records as SI raises recall_SI without penalty); F1 does not. F1 depends on class proportions, which differ between sites, so it is not compared across sites and R3 stays the primary measure. The quantities L, drop_c, G and ΔG are also reported with F1 in place of recall; they do not decide the claim, but disagreement with the recall versions is stated.
 - **Secondary models** are reported with the same quantities. They do not count in §8.4, but if they point the opposite way from the main pair I say so in §10.
 - **At Ningbo**, the same quantities are computed, plus the site gap R3_Shaoxing-test(model, T) − R3_Ningbo(model, T).
 

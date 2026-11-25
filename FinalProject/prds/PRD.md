@@ -57,7 +57,7 @@ No other file may be read.
 - **Signal:** all 12 leads, µV, 500 Hz. Shaoxing SI records: round(figshare CSV) (DRA O30).
 - **Windows:** T ∈ {2, 4, 6, 8, 10} s. The crop is the **first T s**: samples `[0, 500·T)`. The same crop rule is used for training, validation and testing, at both sites.
 - **Crop before processing:** every filter, R-peak detection, feature and normalisation uses only the crop.
-- **Metric:** R3 (primary); per-class recall for all six; macro recall over six; accuracy (§7).
+- **Metric:** R3 (primary); per-class recall, precision and F1 for all six; F1-3 (macro F1 over SI, AFIB, AFL); macro recall and macro F1 over six; accuracy (§7).
 - **Floor:** M_HR (heart rate only).
 - **Seeds:** 4400 everywhere (split, folds, models, bootstrap) unless stated.
 - **Evidence boundary:** §15.
@@ -150,13 +150,20 @@ C5. Predict Ningbo at every T, once, by one script, committed separately.
 
 - **Per-class recall** recall_c = (units of class c predicted as c) / (units of class c), on pooled OOF predictions, on the Shaoxing test set, and on Ningbo.
 - **R3** = mean of recall_SI, recall_AFIB, recall_AFL (primary).
+- **F1 (secondary):**
+  - per-class precision_c = (units predicted as c that are c) / (units predicted as c); F1_c = 2·precision_c·recall_c / (precision_c + recall_c), with F1_c = 0 if class c is never predicted;
+  - **F1-3** = mean of F1_SI, F1_AFIB, F1_AFL;
+  - macro F1 over all six = `sklearn.metrics.f1_score(average="macro")`.
+  - F1 is reported because recall alone ignores false positives: a model that labels many SR records as SI raises recall_SI without penalty, but lowers precision_SI and F1_SI.
+  - F1 depends on class proportions, which differ between the Shaoxing test set and Ningbo, so F1 is not compared across sites. Recall does not depend on class proportions, which is why R3 stays the primary measure.
 - Also: macro recall over all six; accuracy; confusion matrices.
 - **Derived quantities**, per model, at each site:
   - window loss L(T) = R3(10 s) − R3(T);
   - per-class drop drop_c = recall_c(10 s) − recall_c(2 s);
   - raw − feature gap G(T) = R3(M_raw, T) − R3(M_feat, T), and ΔG = G(2 s) − G(10 s);
   - site gap = R3_Shaoxing-test(M, T) − R3_Ningbo(M, T).
-- **Intervals:** paired, class-stratified bootstrap over test units, 2,000 resamples, seed 4400, every model and T on the same resample. It covers test-unit sampling only.
+- **Intervals:** paired, class-stratified bootstrap over test units, 2,000 resamples, seed 4400, every model and T on the same resample, for R3, F1-3 and every derived quantity. It covers test-unit sampling only.
+- **F1 check on the decision:** the derived quantities L(T), drop_c, G(T) and ΔG are also computed with F1 in place of recall and reported beside the recall versions. They do not enter §9, but if they point the opposite way, this is stated.
 - **CNN training spread:** R3 of seeds 4400–4402 on the Shaoxing test set, reported beside the seed-4400 interval but not merged into it.
 - **Kept, not only the mean:** per-fold values in Stage A; every unit's prediction and probabilities.
 
