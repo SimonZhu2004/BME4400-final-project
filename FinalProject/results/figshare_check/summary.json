@@ -1,0 +1,61 @@
+{
+  "diagnostics_md5": "f9795256cd8590f8b22f2f8f6762d89e",
+  "diagnostics_rows": 10646,
+  "fs_rhythm_counts": {
+    "SB": 3889,
+    "SR": 1826,
+    "AFIB": 1780,
+    "ST": 1568,
+    "SVT": 587,
+    "AF": 445,
+    "SA": 399,
+    "AT": 121,
+    "AVNRT": 16,
+    "AVRT": 8,
+    "SAAWR": 7
+  },
+  "SA_sex": {
+    "FEMALE": 176,
+    "MALE": 223
+  },
+  "part1_records": 10247,
+  "U1": {
+    "rule": "JS id k is compared with Diagnostics.xlsx data row k (file order)",
+    "part1_rows_with_age_sex_rhythm_all_equal": 10056,
+    "mismatch_counts_by_field": {
+      "age": 166,
+      "rhythm": 25
+    },
+    "age_mismatches_all_pn89_fs90plus": true,
+    "fs_ages_ge90_total": 168,
+    "rhythm_mismatch_pairs": {
+      "SB;SAAWR/WAVN->SB": 2,
+      "->AVNRT": 16,
+      "->SAAWR": 7
+    },
+    "absent_ids": 399,
+    "absent_ids_fs_rhythm": {
+      "SA": 399
+    },
+    "absent_ids_fs_sex": {
+      "FEMALE": 176,
+      "MALE": 223
+    },
+    "same_check_with_rows_sorted_by_FileName_all_equal": 61
+  },
+  "U9": {
+    "rule": "rate_rule: VentricularRate < 60 -> SB, 60..100 -> SR, > 100 -> ST",
+    "sinus_records_all_10646": 7283,
+    "rule_agrees_all_10646": 7253,
+    "disagreements_label_to_rule": {
+      "SB->SR": 20,
+      "SB->ST": 1,
+      "SR->ST": 4,
+      "SR->SB": 1,
+      "ST->SR": 2,
+      "ST->SB": 2
+    },
+    "sinus_records_part1": 7283,
+    "rule_agrees_part1": 7253
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "csv_files_found": 10646,
+  "csv_headers": {
+    "I,II,III,aVR,aVL,aVF,V1,V2,V3,V4,V5,V6": 10646
+  },
+  "paired_records": 10247,
+  "scale_median": 0.9999955209154755,
+  "scale_min": 0.9998021657997788,
+  "scale_max": 1.0000299831456347,
+  "records_scale_within_1e-3_of_median": 10247,
+  "maxabs_resid_ls_max": 0.7123296284694334,
+  "records_maxabs_resid_ls_gt_1": 0,
+  "records_min_lead_corr_lt_0.999": 0,
+  "paired_mat_equals_round_csv": 10247,
+  "csv_on_4p88_grid_all": 10646,
+  "SI_rows": 399,
+  "SI_csv_on_4p88_grid": 399,
+  "SI_csv_found": 399,
+  "SI_shapes": {
+    "5000x12": 399
+  },
+  "SI_with_nan": 0,
+  "SI_range": [
+    -6763.68,
+    6710.0
+  ],
+  "all_shapes": {
+    "5000x12": 10646
+  },
+  "versions": {
+    "python": "3.13.18",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1"
+  }
+}

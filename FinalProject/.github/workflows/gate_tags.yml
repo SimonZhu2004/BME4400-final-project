@@ -1,0 +1,38 @@
+# Records, on GitHub's side, when a gate tag reaches this repository.
+# Runs no repository code, uses no secrets, and checks nothing out.
+name: gate-tags
+on:
+  push:
+    tags:
+      - "gate-*"
+permissions: {}
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record the tag push
+        env:
+          TAG: ${{ github.ref_name }}
+          COMMIT: ${{ github.sha }}
+          TAG_OBJECT: ${{ github.event.after }}
+          PUSHER: ${{ github.actor }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          received="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          printf '{"repository":"%s","tag":"%s","commit":"%s","tag_object":"%s","pushed_by":"%s","recorded_utc":"%s","run_id":"%s"}\n' \
+            "$REPO" "$TAG" "$COMMIT" "$TAG_OBJECT" "$PUSHER" "$received" "$RUN_ID" > gate_tag_record.json
+          {
+            echo "### Gate tag recorded"
+            echo
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| Tag | \`$TAG\` |"
+            echo "| Commit | \`$COMMIT\` |"
+            echo "| Recorded by GitHub (UTC) | $received |"
+          } >> "$GITHUB_STEP_SUMMARY"
+          cat gate_tag_record.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gate-tag-record
+          path: gate_tag_record.json

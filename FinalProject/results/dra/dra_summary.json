@@ -1,0 +1,240 @@
+{
+  "data_root": "/Users/jinzemao/bme4191_ecg/ecg-arrhythmia/1.0.0",
+  "n_part1_records_in_manifest": 10247,
+  "versions": {
+    "python": "3.13.18",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1"
+  },
+  "files_missing": [],
+  "files_checksum_mismatch": [],
+  "id_range": [
+    "JS00001",
+    "JS10646"
+  ],
+  "ids_absent_in_range": 399,
+  "folder_RECORDS_not_matching_files": [],
+  "folders_without_RECORDS_downloaded": [
+    "11/112"
+  ],
+  "condition_table_rows": 63,
+  "condition_table_distinct_codes": 55,
+  "condition_codes_shared_by_several_acronyms": {
+    "698252002": [
+      "IDC",
+      "IVB"
+    ],
+    "164909002": [
+      "LBBB",
+      "LBBBB",
+      "LFBBB"
+    ],
+    "164865005": [
+      "MI",
+      "MIBW",
+      "MIFW",
+      "MILW",
+      "MISW"
+    ],
+    "195101003": [
+      "WAVN",
+      "SAAWR"
+    ]
+  },
+  "header_record_line_variants(n_sig fs n_samp)": {
+    "12 500 5000": 10246,
+    "<malformed>": 1
+  },
+  "header_issues": {
+    "malformed_record_line": 1,
+    "checksum_written_unsigned(+32768_for_-32768)": 1
+  },
+  "malformed_headers": [
+    {
+      "record": "JS01052",
+      "record_line": "JS01052 12 500 500000/mV 16 0 15 31255 0 I",
+      "n_signal_lines": 11
+    }
+  ],
+  "records_with_base_time_date": 1000,
+  "base_time_date_records_folders": {
+    "09/090": 100,
+    "09/091": 100,
+    "09/092": 100,
+    "09/093": 100,
+    "09/094": 100,
+    "09/095": 100,
+    "09/096": 100,
+    "09/097": 100,
+    "09/098": 100,
+    "09/099": 100
+  },
+  "base_time_date_values_min_max": [
+    "24-Mar-2021 05:29:25",
+    "24-Mar-2021 06:34:48"
+  ],
+  "lead_orders": {
+    "I,II,III,aVR,aVL,aVF,V1,V2,V3,V4,V5,V6": 10246,
+    "II,III,aVR,aVL,aVF,V1,V2,V3,V4,V5,V6": 1
+  },
+  "gain_field_values": {
+    "1000/mV": 122963
+  },
+  "fmt_field_values": {
+    "16+24": 122963
+  },
+  "adc_res_zero_block_values": {
+    "16 0 0": 122963
+  },
+  "extra_comment_keys": {},
+  "Rx_values": {
+    "Unknown": 10247
+  },
+  "Hx_values": {
+    "Unknown": 10247
+  },
+  "Sx_values": {
+    "Unknown": 10247
+  },
+  "signal_issues": {},
+  "signal_global_min_max_adu": [
+    -17080,
+    19681
+  ],
+  "records_by_n_flat_leads": {
+    "0": 10232,
+    "1": 9,
+    "2": 1,
+    "3": 1,
+    "6": 4
+  },
+  "records_by_n_all_zero_leads": {
+    "0": 10232,
+    "1": 9,
+    "2": 1,
+    "3": 1,
+    "6": 4
+  },
+  "flat_lead_counts_by_lead": {
+    "V6": 14,
+    "V1": 4,
+    "V2": 6,
+    "V3": 4,
+    "V4": 5,
+    "V5": 5
+  },
+  "records_with_int16_extreme_values": 0,
+  "groups_of_byte_identical_mat_files": 13,
+  "records_in_byte_identical_groups": 26,
+  "byte_identical_mat_examples": [
+    [
+      "JS01451",
+      "JS06490"
+    ],
+    [
+      "JS01827",
+      "JS03435"
+    ],
+    [
+      "JS02026",
+      "JS03005"
+    ],
+    [
+      "JS02989",
+      "JS05900"
+    ],
+    [
+      "JS05752",
+      "JS08755"
+    ],
+    [
+      "JS09908",
+      "JS10086"
+    ],
+    [
+      "JS10293",
+      "JS10614"
+    ],
+    [
+      "JS10294",
+      "JS10617"
+    ],
+    [
+      "JS10295",
+      "JS10612"
+    ],
+    [
+      "JS10296",
+      "JS10625"
+    ]
+  ],
+  "age_non_integer_values": {},
+  "age_n_integer": 10247,
+  "age_min_median_max": [
+    4,
+    62,
+    89
+  ],
+  "age_quartiles": [
+    50.0,
+    62.0,
+    72.0
+  ],
+  "age_lt_18": 144,
+  "age_ge_90": 0,
+  "sex_values": {
+    "Male": 5733,
+    "Female": 4514
+  },
+  "records_with_empty_Dx": 0,
+  "records_with_repeated_code_in_Dx": 0,
+  "distinct_Dx_codes": 54,
+  "Dx_codes_not_in_condition_table": {
+    "55827005": 1295,
+    "67751000119106": 8,
+    "251166008": 16,
+    "17366009": 7
+  },
+  "n_dx_per_record": {
+    "1": 5141,
+    "2": 2955,
+    "3": 1277,
+    "4": 556,
+    "5": 210,
+    "6": 76,
+    "7": 26,
+    "8": 5,
+    "10": 1
+  },
+  "n_rhythm_labels_per_record": {
+    "0": 23,
+    "1": 10222,
+    "2": 2
+  },
+  "records_with_exactly_one_rhythm_label_by_label": {
+    "SB": 3887,
+    "SR": 1826,
+    "AFIB": 1780,
+    "ST": 1568,
+    "SVT": 587,
+    "AFL(AF)": 445,
+    "AT": 121,
+    "AVRT": 8
+  },
+  "six_class_single_label_total": 9506,
+  "records_without_rhythm_code_by_dx": {
+    "251166008": 7,
+    "17366009": 4,
+    "251166008;47665007": 3,
+    "251166008;428750005": 2,
+    "251166008;164934002": 2,
+    "251166008;47665007;164934002": 1,
+    "17366009;284470004;55827005;428750005;164937009": 1,
+    "17366009;251199005": 1,
+    "17366009;284470004;426995002;55827005;164934002": 1,
+    "251166008;39732003": 1
+  },
+  "multi_rhythm_label_combinations": {
+    "SB;SAAWR/WAVN": 2
+  }
+}

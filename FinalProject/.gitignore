@@ -1,0 +1,24 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+.venv/
+
+# Optional scratch space for experiments; never committed.
+drafts/*
+!drafts/.gitkeep
+
+# Raw recordings live outside this repository and must never be committed (hygiene, not an access boundary).
+*.edf
+*.edf.event
+*.event
+*.fif
+*.hea
+*.mat
+*.dat
+WFDBRecords/
+ecg-arrhythmia/
+bme4191_ecg/
+raw/
+MNE-eegbci-data/
+bme4191_eeg/
