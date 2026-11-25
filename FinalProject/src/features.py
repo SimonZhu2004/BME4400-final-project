@@ -8,11 +8,10 @@ Run from the repository root, in the bme4400-final environment:
     python src/features.py --split dev             # 7,909 development units (Stage A)
     python src/features.py --split test            # 1,978 test units (Stage B only; PRD §5 B3)
 Options: --windows 2 4 6 8 10, --workers N, --limit N (first N units, for timing),
---data-root ~/bme4191_ecg, --out DIR (default <data-root>/derived/features).
+--data-root ~/bme4191_ecg, --out DIR (default results/features/tables/ in the repository).
 
-Writes, outside the repository:
-    <out>/features_<split>_T<T>.csv   record, label, code, [fold], meta_n_rpeaks, 16 features
-and, in the repository:
+Writes, in the repository (PRD amendment 6):
+    results/features/tables/features_<split>_T<T>.csv   record, label, code, [fold], meta_n_rpeaks, 16 features
     results/features/feature_list.json
     results/features/manifest_<split>.json   file hashes, row counts, NaN counts per feature, versions
 """
@@ -183,9 +182,7 @@ def main() -> int:
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
     root = Path(a.data_root).expanduser()
-    out = Path(a.out).expanduser() if a.out else root / "derived" / "features"
-    if out.resolve().is_relative_to(ecg_io.REPO.resolve()):
-        raise SystemExit("--out must be outside the repository (PRD §15)")
+    out = Path(a.out).expanduser() if a.out else ecg_io.REPO / "results" / "features" / "tables"
     out.mkdir(parents=True, exist_ok=True)
     if not set(a.windows) <= set(WINDOWS):
         raise SystemExit(f"windows must be among {WINDOWS}")
@@ -227,7 +224,8 @@ def main() -> int:
                 w.writerow([r[k] for k in key_cols] + [f["meta_n_rpeaks"]]
                            + ["" if np.isnan(f[k]) else repr(float(f[k])) for k in FEATURES])
         nan_counts = {k: int(sum(np.isnan(results[r["record"]][T][k]) for r in rows)) for k in FEATURES}
-        files[f"T{T}"] = {"path": str(path), "sha256": ecg_io.sha256_file(path), "rows": len(rows),
+        shown = path.resolve().relative_to(ecg_io.REPO.resolve()) if path.resolve().is_relative_to(ecg_io.REPO.resolve()) else path
+        files[f"T{T}"] = {"path": str(shown), "sha256": ecg_io.sha256_file(path), "rows": len(rows),
                           "nan_counts": nan_counts,
                           "rpeaks_lt2": sum(results[r["record"]][T]["meta_n_rpeaks"] < 2 for r in rows),
                           "rpeaks_lt3": sum(results[r["record"]][T]["meta_n_rpeaks"] < 3 for r in rows)}

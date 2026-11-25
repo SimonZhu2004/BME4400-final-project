@@ -16,6 +16,7 @@ Do not delete a section that does not apply. Keep the heading and write:
 | 3 | 2026-11-25 | §5 A3 | DWT delineation features (P-wave fraction, P amplitude, PR median and SD, QRS width; per lead) replaced by `p_consistency` per lead: **24 → 16 features** | On the development set the DWT output was implausible: a P wave was "found" in nearly every AFIB beat (median `p_frac` 1.00), median QRS width 150–200 ms, only 52% of lead-II PR intervals in 80–300 ms. NeuroKit's `ecg_delineate` also refuses crops shorter than 4 s. `p_consistency` separates the classes at 10 s and 2 s (lead II median: sinus classes 0.89–0.97, AFL 0.49–0.50, AFIB −0.02 to 0.05; `results/features/qc_dev.json`) |
 | 4 | 2026-11-25 | §4 item 5 | Heart-rate check **fails**: 94.2% < 95% | Eight NeuroKit R-peak detectors compared on 1,800 development units (`src/qc_rpeak_detectors.py`, `results/features/qc_rpeak_detectors.csv`); the default `neurokit` detector is best (94.1% on the sample). Errors: one extra peak in some SB records, missed peaks in some AFIB / AFL records. An amplitude filter on R peaks made it worse at every threshold tried (0.3–0.6 × median). |
 | 5 | 2026-11-25 | §4 item 5, §9 | **Decision on amendment 4: proceed.** The check stays recorded as failed (94.2% < 95%); the 95% threshold is not lowered. The team accepts the deviation and narrows what M_HR can show (VCM §6) | The shortfall is in AFIB (87.8%) and AFL (86.0%), which the claim separates mainly by RR irregularity and atrial activity, not by rate; sinus classes agree for 94–99%. No available detector does better. Consequence: wherever M_HR or the gain over M_HR is reported, it is stated that heart rate disagrees with `VentricularRate` by more than 5 bpm in 12–14% of AFIB / AFL development units, so M_HR is a floor built on our heart-rate estimate, not on the recorded rate |
+| 6 | 2026-11-25 | §5 A3, §10, §15 | Feature tables are committed in the repository, under `results/features/tables/`, instead of `DATA/derived/` | Team decision, so every teammate uses the same tables without rerunning the extraction. They are derived values (16 numbers per record and window), not raw recordings; the evidence-boundary check still passes. Only the **development** tables are committed now; the test tables are computed and committed at step B3 |
 
 ---
 
@@ -133,7 +134,7 @@ A3. **Features** (`src/features.py`), computed from the crop:
 - One set of R peaks (lead II) is used for every feature of a crop.
 - Run: `python src/features.py --split dev` (Stage A; about 4 minutes on 7 cores). `--split test` only at step B3.
 - QC (development only): `python src/feature_qc.py` writes `results/features/qc_dev.json` (heart-rate check, R-peak counts, NaN shares, class medians).
-- Feature tables are saved under `DATA/derived/` (outside the repository).
+- Feature tables are committed under `results/features/tables/features_<split>_T<T>.csv` (amendment 6). Their SHA-256 are in `results/features/manifest_<split>.json`; a rerun must reproduce them exactly.
 
 A4. **Models.** All balanced across classes, no age or sex, seed 4400.
 
@@ -243,6 +244,7 @@ Under `results/` (committed):
 |---|---|
 | `splits/shaoxing_test_ids.csv` (+ `.sha256`) | `record, label` |
 | `splits/shaoxing_dev_folds.csv` | `record, label, fold` |
+| `features/tables/features_dev_T{2,4,6,8,10}.csv` (B3: `features_test_T*.csv`) | `record, label, code, [fold], meta_n_rpeaks` + 16 features, one row per unit |
 | `features/feature_list.json` | feature names, order and definitions |
 | `features/manifest_dev.json`, `features/manifest_test.json` | feature-table hashes, row counts, NaN counts, versions |
 | `features/qc_dev.json`, `features/qc_rpeak_detectors.csv` | feature QC (amendments 2–4) |
@@ -323,6 +325,6 @@ Not allowed without amending this PRD first:
 
 ## 15. Protected-evidence boundary
 
-- Raw records, figshare files, feature tables and model files stay in `~/bme4191_ecg/` (outside the repository). `.gitignore` blocks `*.hea`, `*.mat`, `*.dat`. `python checks/check_evidence_boundary.py` must pass before every commit.
+- Raw records, figshare files and model files stay in `~/bme4191_ecg/` (outside the repository). Feature tables are in the repository (amendment 6); the test-set tables are added only at step B3. `.gitignore` blocks `*.hea`, `*.mat`, `*.dat`. `python checks/check_evidence_boundary.py` must pass before every commit.
 - Signal values are not pasted into AI chats; scripts read them locally.
 - **Ningbo (part 2) stays unread until the C1 model manifest is committed.** It is then downloaded with `--part 2 --unseal-part2`. Date and commit of the unsealing: _to be filled in at step C2._

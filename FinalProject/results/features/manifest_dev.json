@@ -10,7 +10,7 @@
   ],
   "files": {
     "T2": {
-      "path": "/Users/jinzemao/bme4191_ecg/derived/features/features_dev_T2.csv",
+      "path": "results/features/tables/features_dev_T2.csv",
       "sha256": "e9492c55cf7c33662236801cfb6afca9b758569d5cb95381271e810e8a12dd15",
       "rows": 7909,
       "nan_counts": {
@@ -35,7 +35,7 @@
       "rpeaks_lt3": 5318
     },
     "T4": {
-      "path": "/Users/jinzemao/bme4191_ecg/derived/features/features_dev_T4.csv",
+      "path": "results/features/tables/features_dev_T4.csv",
       "sha256": "02edb9d616e4ec2eea7159e78394ecd2147510922a4421a68170d7eb7c420a9e",
       "rows": 7909,
       "nan_counts": {
@@ -60,7 +60,7 @@
       "rpeaks_lt3": 54
     },
     "T6": {
-      "path": "/Users/jinzemao/bme4191_ecg/derived/features/features_dev_T6.csv",
+      "path": "results/features/tables/features_dev_T6.csv",
       "sha256": "e9ada4d3d2fdbf891d9c3359d73e16f18d8ef1db29f6cb8ddbb248d0bb53124b",
       "rows": 7909,
       "nan_counts": {
@@ -85,7 +85,7 @@
       "rpeaks_lt3": 11
     },
     "T8": {
-      "path": "/Users/jinzemao/bme4191_ecg/derived/features/features_dev_T8.csv",
+      "path": "results/features/tables/features_dev_T8.csv",
       "sha256": "8b89c15afedea04ac4517920d88a099535064917ccf92cb9d1c30f36120301c6",
       "rows": 7909,
       "nan_counts": {
@@ -110,7 +110,7 @@
       "rpeaks_lt3": 8
     },
     "T10": {
-      "path": "/Users/jinzemao/bme4191_ecg/derived/features/features_dev_T10.csv",
+      "path": "results/features/tables/features_dev_T10.csv",
       "sha256": "3004d3c6cff51aa31218af6e7ef4742566e90dc106274dfdcd1f7d89e88ffe02",
       "rows": 7909,
       "nan_counts": {
@@ -135,9 +135,9 @@
       "rpeaks_lt3": 6
     }
   },
-  "elapsed_s": 25,
+  "elapsed_s": 29,
   "workers": 7,
-  "git_commit": "366c087545a36024146a5682b953272ad4bd56be",
+  "git_commit": "5417e46e1bbd16193c5bbdd4f09567474ed6748d",
   "versions": {
     "python": "3.13.18",
     "numpy": "2.3.5",

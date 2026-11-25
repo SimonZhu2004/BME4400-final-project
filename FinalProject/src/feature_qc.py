@@ -25,7 +25,7 @@ import features as F  # noqa: E402
 
 def main() -> int:
     root = ecg_io.DEFAULT_DATA_ROOT
-    d = root / "derived" / "features"
+    d = ecg_io.REPO / "results" / "features" / "tables"
     tables = {T: pd.read_csv(d / f"features_dev_T{T}.csv") for T in F.WINDOWS}
     manifest = json.loads((ecg_io.REPO / "results" / "features" / "manifest_dev.json").read_text())
     for T, t in tables.items():

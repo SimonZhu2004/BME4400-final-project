@@ -80,7 +80,19 @@ git status results/splits/            # must show no changes
 split is stratified by label with seed 4400. Every random seed used anywhere
 in the analysis is listed in PRD §3.
 
-**4. Evidence boundary.** Before every commit:
+**4. Feature tables.** The development tables are committed in
+`results/features/tables/` (16 features, windows 2, 4, 6, 8 and 10 s).
+Rerunning the extraction must reproduce them exactly:
+
+```text
+python src/features.py --split dev    # about 4 minutes
+git status results/features/          # must show no changes
+python src/feature_qc.py              # heart-rate check etc. -> results/features/qc_dev.json
+```
+
+Do not run `--split test` until PRD §5 step B3.
+
+**5. Evidence boundary.** Before every commit:
 
 ```text
 python checks/check_evidence_boundary.py
