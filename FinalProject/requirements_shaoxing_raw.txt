@@ -1,0 +1,12 @@
+# Python 3.11-3.13; Python 3.12 recommended. Install in a fresh virtual environment.
+# Keep these exact sklearn/sktime pins: newer framework combinations can break Pipeline.
+numpy==2.3.5
+pandas==2.3.3
+scipy==1.16.3
+scikit-learn==1.7.2
+sktime==0.40.1
+numba==0.62.1
+openpyxl==3.1.5
+joblib==1.5.2
+# Select a CPU/CUDA build appropriate to your hardware; the run records its version.
+torch>=2.6,<3

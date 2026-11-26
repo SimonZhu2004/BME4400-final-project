@@ -1,0 +1,39 @@
+{
+  "dataset": "Frozen raw Shaoxing cohort",
+  "records": 9887,
+  "class_counts": {
+    "SB": 3888,
+    "SR": 1825,
+    "AFIB": 1778,
+    "ST": 1562,
+    "AFL": 438,
+    "SI": 396
+  },
+  "source_counts": {
+    "physionet_part1": 9491,
+    "figshare_csv": 396
+  },
+  "physionet_root": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\physionet data\\ecg-arrhythmia-1.0.0\\a-large-scale-12-lead-electrocardiogram-database-for-arrhythmia-study-1.0.0",
+  "figshare_raw": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\data\\ECGData.zip",
+  "diagnostics_sha256": "5c508faccf394bdeef092963ce3e6a8ce0bd7388f07a9ee6c25043375533a899",
+  "publisher_manifest_sha256": "dfad0c26a276ce7e450e5002051f4c749304552d9add4d592928bbdcb6e4f31c",
+  "lead_order": [
+    "I",
+    "II",
+    "III",
+    "aVR",
+    "aVL",
+    "aVF",
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6"
+  ],
+  "source_hz": 500,
+  "processed_hz": 250,
+  "si_conversion": "round original CSV to whole uV, transpose, little-endian int16",
+  "no_new_exclusions": true,
+  "unit_assumption": "one ECG record per patient; patient identity not verified"
+}

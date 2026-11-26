@@ -1,0 +1,9 @@
+{
+  "checked": 9887,
+  "passed": 9887,
+  "failed": 0,
+  "header_first_line_issues": [
+    "JS01052"
+  ],
+  "note": "Header text issues do not invalidate matching, structurally valid MAT arrays"
+}

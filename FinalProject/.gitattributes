@@ -1,0 +1,4 @@
+# Preserve uploaded artifacts and their recorded checksums byte for byte.
+/train_shaoxing_raw_models.py -text
+/requirements_shaoxing_raw.txt -text
+/results_shaoxing_raw/** -text

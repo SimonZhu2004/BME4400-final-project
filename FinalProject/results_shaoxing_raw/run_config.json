@@ -1,0 +1,90 @@
+{
+  "mode": "training",
+  "arguments": {
+    "data_dir": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\data",
+    "physionet_dir": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\physionet data\\ecg-arrhythmia-1.0.0\\a-large-scale-12-lead-electrocardiogram-database-for-arrhythmia-study-1.0.0",
+    "split_dir": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\physionet data\\split",
+    "figshare_raw": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\data\\ECGData.zip",
+    "diagnostics": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\data\\Diagnostics.xlsx",
+    "output_dir": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw",
+    "check_data_only": false,
+    "models": [
+      "cnn",
+      "minirocket"
+    ],
+    "durations": [
+      2,
+      4,
+      6,
+      8,
+      10
+    ],
+    "seed": 4400,
+    "selection_metric": "r3",
+    "device": "auto",
+    "determinism": "warn",
+    "epochs": 40,
+    "patience": 8,
+    "batch_size": 64,
+    "cnn_lrs": [
+      0.001,
+      0.0003
+    ],
+    "minirocket_kernels": 10000,
+    "ridge_alphas": [
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0,
+      100.0,
+      1000.0
+    ],
+    "jobs": 4
+  },
+  "classes": [
+    "SR",
+    "SB",
+    "ST",
+    "SI",
+    "AFIB",
+    "AFL"
+  ],
+  "packages": {
+    "numpy": "2.3.5",
+    "pandas": "2.3.3",
+    "scipy": "1.16.3",
+    "scikit-learn": "1.7.2",
+    "torch": "2.15.0",
+    "sktime": "0.40.1",
+    "numba": "0.62.1",
+    "openpyxl": "3.1.5",
+    "joblib": "1.5.2"
+  },
+  "python": "3.12.16 | packaged by Anaconda, Inc. | (main, Oct 26 2026, 20:13:05) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "device": "cpu",
+  "script_sha256": "8875db4f231394cd54d86d333a00980c524a6be0266b6bdc47614a8d853d16a4",
+  "input_source": "frozen_physionet_raw_plus_original_figshare_si",
+  "frozen_input_hashes": {
+    "shaoxing_units.csv": "b708bacdaa9d986112c9b2c232b798184629202fc15213199c1b345f6372e5a3",
+    "shaoxing_test_ids.csv": "2c95db54fdc3d65e611b0a8c8c7ea1f0e867dfdf4d545f982eb30945757c9d8a",
+    "shaoxing_dev_folds.csv": "252f3eed531bee991abf774adaa82ecdd924e511bf426ade619fcce006047b28"
+  },
+  "source_audit": {
+    "checked": 9887,
+    "passed": 9887,
+    "failed": 0,
+    "header_first_line_issues": [
+      "JS01052"
+    ],
+    "note": "Header text issues do not invalidate matching, structurally valid MAT arrays"
+  },
+  "determinism": {
+    "mode": "warn",
+    "strict_enforcement": false,
+    "note": "warn mode does not guarantee bitwise reproducibility"
+  },
+  "auprc_definition": "macro average of per-class one-vs-rest average precision (AP)",
+  "final_cnn_training": "All 7,909 development rows; median winning-CV best epoch; no test-based stopping"
+}

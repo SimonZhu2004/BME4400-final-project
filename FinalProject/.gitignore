@@ -22,3 +22,6 @@ bme4191_ecg/
 raw/
 MNE-eegbci-data/
 bme4191_eeg/
+
+# Large intermediate signal cache.
+/results_shaoxing_raw/signal_cache/

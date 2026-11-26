@@ -1,0 +1,75 @@
+{
+  "summary": {
+    "precision_macro": 0.7408209090602571,
+    "recall_macro": 0.7423549629281793,
+    "macro_f1": 0.7110220229507891,
+    "r3": 0.5606642444930029,
+    "accuracy": 0.8316481294236603,
+    "auroc_macro_ovr": 0.9700567877928203,
+    "auprc_macro_ap_ovr": 0.8071455091009404
+  },
+  "per_class": [
+    {
+      "class_name": "SR",
+      "label": 0,
+      "support": 365,
+      "precision": 0.6830708661417323,
+      "recall": 0.9506849315068493,
+      "f1": 0.7949599083619702,
+      "auroc_ovr": 0.973365378899184,
+      "auprc_ap_ovr": 0.8733583094647577
+    },
+    {
+      "class_name": "SB",
+      "label": 1,
+      "support": 778,
+      "precision": 0.9911764705882353,
+      "recall": 0.8663239074550129,
+      "f1": 0.9245541838134431,
+      "auroc_ovr": 0.9964492287917737,
+      "auprc_ap_ovr": 0.9940542202627471
+    },
+    {
+      "class_name": "ST",
+      "label": 2,
+      "support": 312,
+      "precision": 0.9283489096573209,
+      "recall": 0.9551282051282052,
+      "f1": 0.9415481832543444,
+      "auroc_ovr": 0.9962042509311417,
+      "auprc_ap_ovr": 0.9886800796923682
+    },
+    {
+      "class_name": "SI",
+      "label": 3,
+      "support": 79,
+      "precision": 0.5151515151515151,
+      "recall": 0.21518987341772153,
+      "f1": 0.30357142857142855,
+      "auroc_ovr": 0.8984742136100946,
+      "auprc_ap_ovr": 0.36912011683196183
+    },
+    {
+      "class_name": "AFIB",
+      "label": 4,
+      "support": 356,
+      "precision": 0.9446640316205533,
+      "recall": 0.6713483146067416,
+      "f1": 0.7848932676518884,
+      "auroc_ovr": 0.9900888762659499,
+      "auprc_ap_ovr": 0.9465841716923881
+    },
+    {
+      "class_name": "AFL",
+      "label": 5,
+      "support": 88,
+      "precision": 0.3825136612021858,
+      "recall": 0.7954545454545454,
+      "f1": 0.5166051660516605,
+      "auroc_ovr": 0.9657587782587782,
+      "auprc_ap_ovr": 0.671076156661419
+    }
+  ],
+  "score_type": "softmax_probability",
+  "auprc_definition": "average precision"
+}

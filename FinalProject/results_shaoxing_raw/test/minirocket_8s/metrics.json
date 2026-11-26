@@ -1,0 +1,75 @@
+{
+  "summary": {
+    "precision_macro": 0.8412038260690071,
+    "recall_macro": 0.8163525123644875,
+    "macro_f1": 0.8269847177432325,
+    "r3": 0.6898744952009067,
+    "accuracy": 0.9216380182002022,
+    "auroc_macro_ovr": 0.9699558222086303,
+    "auprc_macro_ap_ovr": 0.8441472858855651
+  },
+  "per_class": [
+    {
+      "class_name": "SR",
+      "label": 0,
+      "support": 365,
+      "precision": 0.8972222222222223,
+      "recall": 0.8849315068493151,
+      "f1": 0.8910344827586207,
+      "auroc_ovr": 0.9793951540989733,
+      "auprc_ap_ovr": 0.9366498646236904
+    },
+    {
+      "class_name": "SB",
+      "label": 1,
+      "support": 778,
+      "precision": 0.9783715012722646,
+      "recall": 0.9884318766066839,
+      "f1": 0.9833759590792839,
+      "auroc_ovr": 0.9984661525278492,
+      "auprc_ap_ovr": 0.9975908767427043
+    },
+    {
+      "class_name": "ST",
+      "label": 2,
+      "support": 312,
+      "precision": 0.9612903225806452,
+      "recall": 0.9551282051282052,
+      "f1": 0.9581993569131833,
+      "auroc_ovr": 0.9975836488441531,
+      "auprc_ap_ovr": 0.9900006130152561
+    },
+    {
+      "class_name": "SI",
+      "label": 3,
+      "support": 79,
+      "precision": 0.5135135135135135,
+      "recall": 0.4810126582278481,
+      "f1": 0.49673202614379086,
+      "auroc_ovr": 0.8840429006605742,
+      "auprc_ap_ovr": 0.4426401307238411
+    },
+    {
+      "class_name": "AFIB",
+      "label": 4,
+      "support": 356,
+      "precision": 0.8968253968253969,
+      "recall": 0.952247191011236,
+      "f1": 0.9237057220708447,
+      "auroc_ovr": 0.9900871444603001,
+      "auprc_ap_ovr": 0.9536971706759403
+    },
+    {
+      "class_name": "AFL",
+      "label": 5,
+      "support": 88,
+      "precision": 0.8,
+      "recall": 0.6363636363636364,
+      "f1": 0.7088607594936709,
+      "auroc_ovr": 0.9701599326599326,
+      "auprc_ap_ovr": 0.7443050595319588
+    }
+  ],
+  "score_type": "ridge_decision_margin",
+  "auprc_definition": "average precision"
+}

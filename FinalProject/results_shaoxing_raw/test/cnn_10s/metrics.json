@@ -1,0 +1,75 @@
+{
+  "summary": {
+    "precision_macro": 0.8208593703588578,
+    "recall_macro": 0.8350366339175043,
+    "macro_f1": 0.8273738043970663,
+    "r3": 0.7341421971097694,
+    "accuracy": 0.9140546006066734,
+    "auroc_macro_ovr": 0.9837433765979395,
+    "auprc_macro_ap_ovr": 0.8612192769324015
+  },
+  "per_class": [
+    {
+      "class_name": "SR",
+      "label": 0,
+      "support": 365,
+      "precision": 0.8898305084745762,
+      "recall": 0.863013698630137,
+      "f1": 0.8762169680111266,
+      "auroc_ovr": 0.9848406355892619,
+      "auprc_ap_ovr": 0.9218489974709372
+    },
+    {
+      "class_name": "SB",
+      "label": 1,
+      "support": 778,
+      "precision": 0.9920634920634921,
+      "recall": 0.9640102827763496,
+      "f1": 0.9778357235984355,
+      "auroc_ovr": 0.9991655955441303,
+      "auprc_ap_ovr": 0.9986514440435511
+    },
+    {
+      "class_name": "ST",
+      "label": 2,
+      "support": 312,
+      "precision": 0.9300911854103343,
+      "recall": 0.9807692307692307,
+      "f1": 0.9547581903276131,
+      "auroc_ovr": 0.9970353526025795,
+      "auprc_ap_ovr": 0.9904945111843856
+    },
+    {
+      "class_name": "SI",
+      "label": 3,
+      "support": 79,
+      "precision": 0.5111111111111111,
+      "recall": 0.5822784810126582,
+      "f1": 0.5443786982248521,
+      "auroc_ovr": 0.9434545830250431,
+      "auprc_ap_ovr": 0.5083036608766828
+    },
+    {
+      "class_name": "AFIB",
+      "label": 4,
+      "support": 356,
+      "precision": 0.9166666666666666,
+      "recall": 0.9269662921348315,
+      "f1": 0.9217877094972067,
+      "auroc_ovr": 0.9952981476606769,
+      "auprc_ap_ovr": 0.9772520353591381
+    },
+    {
+      "class_name": "AFL",
+      "label": 5,
+      "support": 88,
+      "precision": 0.6853932584269663,
+      "recall": 0.6931818181818182,
+      "f1": 0.6892655367231638,
+      "auroc_ovr": 0.9826659451659452,
+      "auprc_ap_ovr": 0.7707650126597138
+    }
+  ],
+  "score_type": "softmax_probability",
+  "auprc_definition": "average precision"
+}

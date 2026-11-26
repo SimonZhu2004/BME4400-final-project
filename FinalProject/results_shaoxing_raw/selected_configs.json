@@ -1,0 +1,182 @@
+{
+  "cnn_2s": {
+    "model": "cnn",
+    "T_seconds": 2,
+    "config_id": 0,
+    "config": {
+      "learning_rate": 0.001
+    },
+    "selection_metric": "r3",
+    "development_selection_score": 0.6866681920852747,
+    "final_epochs": 7,
+    "fold_best_epochs": [
+      8,
+      7,
+      3,
+      8,
+      6
+    ],
+    "fold_ridge_alphas": []
+  },
+  "minirocket_2s": {
+    "model": "minirocket",
+    "T_seconds": 2,
+    "config_id": 0,
+    "config": {},
+    "selection_metric": "r3",
+    "development_selection_score": 0.5531304822372186,
+    "final_epochs": null,
+    "fold_best_epochs": [],
+    "fold_ridge_alphas": [
+      1000.0,
+      1000.0,
+      1000.0,
+      1000.0,
+      1000.0
+    ]
+  },
+  "cnn_4s": {
+    "model": "cnn",
+    "T_seconds": 4,
+    "config_id": 0,
+    "config": {
+      "learning_rate": 0.001
+    },
+    "selection_metric": "r3",
+    "development_selection_score": 0.7391102034659117,
+    "final_epochs": 9,
+    "fold_best_epochs": [
+      11,
+      13,
+      3,
+      8,
+      9
+    ],
+    "fold_ridge_alphas": []
+  },
+  "minirocket_4s": {
+    "model": "minirocket",
+    "T_seconds": 4,
+    "config_id": 0,
+    "config": {},
+    "selection_metric": "r3",
+    "development_selection_score": 0.6196822903758974,
+    "final_epochs": null,
+    "fold_best_epochs": [],
+    "fold_ridge_alphas": [
+      1000.0,
+      1000.0,
+      1000.0,
+      1000.0,
+      1000.0
+    ]
+  },
+  "cnn_6s": {
+    "model": "cnn",
+    "T_seconds": 6,
+    "config_id": 1,
+    "config": {
+      "learning_rate": 0.0003
+    },
+    "selection_metric": "r3",
+    "development_selection_score": 0.7595249102760183,
+    "final_epochs": 8,
+    "fold_best_epochs": [
+      8,
+      8,
+      3,
+      9,
+      7
+    ],
+    "fold_ridge_alphas": []
+  },
+  "minirocket_6s": {
+    "model": "minirocket",
+    "T_seconds": 6,
+    "config_id": 0,
+    "config": {},
+    "selection_metric": "r3",
+    "development_selection_score": 0.6216246849070393,
+    "final_epochs": null,
+    "fold_best_epochs": [],
+    "fold_ridge_alphas": [
+      1000.0,
+      1000.0,
+      1000.0,
+      1000.0,
+      1000.0
+    ]
+  },
+  "cnn_8s": {
+    "model": "cnn",
+    "T_seconds": 8,
+    "config_id": 0,
+    "config": {
+      "learning_rate": 0.001
+    },
+    "selection_metric": "r3",
+    "development_selection_score": 0.7706327719497068,
+    "final_epochs": 8,
+    "fold_best_epochs": [
+      7,
+      8,
+      10,
+      6,
+      13
+    ],
+    "fold_ridge_alphas": []
+  },
+  "minirocket_8s": {
+    "model": "minirocket",
+    "T_seconds": 8,
+    "config_id": 0,
+    "config": {},
+    "selection_metric": "r3",
+    "development_selection_score": 0.6665343778013985,
+    "final_epochs": null,
+    "fold_best_epochs": [],
+    "fold_ridge_alphas": [
+      1000.0,
+      1000.0,
+      1000.0,
+      1000.0,
+      1000.0
+    ]
+  },
+  "cnn_10s": {
+    "model": "cnn",
+    "T_seconds": 10,
+    "config_id": 0,
+    "config": {
+      "learning_rate": 0.001
+    },
+    "selection_metric": "r3",
+    "development_selection_score": 0.7738596788127595,
+    "final_epochs": 13,
+    "fold_best_epochs": [
+      7,
+      13,
+      2,
+      14,
+      13
+    ],
+    "fold_ridge_alphas": []
+  },
+  "minirocket_10s": {
+    "model": "minirocket",
+    "T_seconds": 10,
+    "config_id": 0,
+    "config": {},
+    "selection_metric": "r3",
+    "development_selection_score": 0.6666162137631212,
+    "final_epochs": null,
+    "fold_best_epochs": [],
+    "fold_ridge_alphas": [
+      1000.0,
+      1000.0,
+      1000.0,
+      1000.0,
+      1000.0
+    ]
+  }
+}

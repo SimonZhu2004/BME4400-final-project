@@ -1,0 +1,42 @@
+{
+  "origin": "Existing frozen CSVs; NOT regenerated",
+  "frozen_split_seed": 4400,
+  "model_seed": 4400,
+  "records": 9887,
+  "dev": 7909,
+  "test": 1978,
+  "folds": 5,
+  "frozen_input_hashes": {
+    "shaoxing_units.csv": "b708bacdaa9d986112c9b2c232b798184629202fc15213199c1b345f6372e5a3",
+    "shaoxing_test_ids.csv": "2c95db54fdc3d65e611b0a8c8c7ea1f0e867dfdf4d545f982eb30945757c9d8a",
+    "shaoxing_dev_folds.csv": "252f3eed531bee991abf774adaa82ecdd924e511bf426ade619fcce006047b28"
+  },
+  "dev_test_overlap": 0,
+  "manifest_sha256": "cf8617bc74ce5d106ad42fcfa6a63cfc3b227351c0696f447dcd0a181a5deefd",
+  "counts": {
+    "AFIB": {
+      "dev": 1422,
+      "test": 356
+    },
+    "AFL": {
+      "dev": 350,
+      "test": 88
+    },
+    "SB": {
+      "dev": 3110,
+      "test": 778
+    },
+    "SI": {
+      "dev": 317,
+      "test": 79
+    },
+    "SR": {
+      "dev": 1460,
+      "test": 365
+    },
+    "ST": {
+      "dev": 1250,
+      "test": 312
+    }
+  }
+}

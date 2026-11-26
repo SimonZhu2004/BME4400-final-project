@@ -1,0 +1,5 @@
+{
+  "ranking": "macro one-vs-rest AUROC; AUPRC is average precision (AP)",
+  "summary": "Mean and sample standard deviation across five outer folds, for every configuration",
+  "selection_bias": "CNN selected-config CV metrics are development estimates; use final test for confirmation"
+}

@@ -1,0 +1,227 @@
+{
+  "cnn_2s": {
+    "path": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw\\models\\cnn_2s.pt",
+    "sha256": "c8a8d827208de9ab0b61a2f10e98f4cf698a9513b1fabaf4c41b58e4a80dfca5",
+    "choice": {
+      "model": "cnn",
+      "T_seconds": 2,
+      "config_id": 0,
+      "config": {
+        "learning_rate": 0.001
+      },
+      "selection_metric": "r3",
+      "development_selection_score": 0.6866681920852747,
+      "final_epochs": 7,
+      "fold_best_epochs": [
+        8,
+        7,
+        3,
+        8,
+        6
+      ],
+      "fold_ridge_alphas": []
+    }
+  },
+  "minirocket_2s": {
+    "path": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw\\models\\minirocket_2s.joblib",
+    "sha256": "dc72f48f9de67b11d13ccd01b9461185830e3c571c91d0284c45be849612eaad",
+    "choice": {
+      "model": "minirocket",
+      "T_seconds": 2,
+      "config_id": 0,
+      "config": {},
+      "selection_metric": "r3",
+      "development_selection_score": 0.5531304822372186,
+      "final_epochs": null,
+      "fold_best_epochs": [],
+      "fold_ridge_alphas": [
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0
+      ]
+    },
+    "final_ridge_alpha": 1000.0
+  },
+  "cnn_4s": {
+    "path": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw\\models\\cnn_4s.pt",
+    "sha256": "b663844d7ea43c4aa0e73ef07187cfca57b34c92d83cbaa260b8cf817933b499",
+    "choice": {
+      "model": "cnn",
+      "T_seconds": 4,
+      "config_id": 0,
+      "config": {
+        "learning_rate": 0.001
+      },
+      "selection_metric": "r3",
+      "development_selection_score": 0.7391102034659117,
+      "final_epochs": 9,
+      "fold_best_epochs": [
+        11,
+        13,
+        3,
+        8,
+        9
+      ],
+      "fold_ridge_alphas": []
+    }
+  },
+  "minirocket_4s": {
+    "path": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw\\models\\minirocket_4s.joblib",
+    "sha256": "8fa09b90e1ff11b6b6e34f86cb1ed64f61c1feb11d94f871dd5930745cc50f6e",
+    "choice": {
+      "model": "minirocket",
+      "T_seconds": 4,
+      "config_id": 0,
+      "config": {},
+      "selection_metric": "r3",
+      "development_selection_score": 0.6196822903758974,
+      "final_epochs": null,
+      "fold_best_epochs": [],
+      "fold_ridge_alphas": [
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0
+      ]
+    },
+    "final_ridge_alpha": 1000.0
+  },
+  "cnn_6s": {
+    "path": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw\\models\\cnn_6s.pt",
+    "sha256": "0e904db51ee885e61ddd27c9523727caacb196e5516990e66e88857386bb4bcc",
+    "choice": {
+      "model": "cnn",
+      "T_seconds": 6,
+      "config_id": 1,
+      "config": {
+        "learning_rate": 0.0003
+      },
+      "selection_metric": "r3",
+      "development_selection_score": 0.7595249102760183,
+      "final_epochs": 8,
+      "fold_best_epochs": [
+        8,
+        8,
+        3,
+        9,
+        7
+      ],
+      "fold_ridge_alphas": []
+    }
+  },
+  "minirocket_6s": {
+    "path": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw\\models\\minirocket_6s.joblib",
+    "sha256": "2ae8fd247fe9cd680dac604a914d851b165fe2f08736cb140636f9e95a8aa663",
+    "choice": {
+      "model": "minirocket",
+      "T_seconds": 6,
+      "config_id": 0,
+      "config": {},
+      "selection_metric": "r3",
+      "development_selection_score": 0.6216246849070393,
+      "final_epochs": null,
+      "fold_best_epochs": [],
+      "fold_ridge_alphas": [
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0
+      ]
+    },
+    "final_ridge_alpha": 1000.0
+  },
+  "cnn_8s": {
+    "path": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw\\models\\cnn_8s.pt",
+    "sha256": "d27d04e885738dc779e3ee671974527ad04f50a1c754e3d646a01ee7b55c5d7d",
+    "choice": {
+      "model": "cnn",
+      "T_seconds": 8,
+      "config_id": 0,
+      "config": {
+        "learning_rate": 0.001
+      },
+      "selection_metric": "r3",
+      "development_selection_score": 0.7706327719497068,
+      "final_epochs": 8,
+      "fold_best_epochs": [
+        7,
+        8,
+        10,
+        6,
+        13
+      ],
+      "fold_ridge_alphas": []
+    }
+  },
+  "minirocket_8s": {
+    "path": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw\\models\\minirocket_8s.joblib",
+    "sha256": "42b14d645cc862bc122c893059023b66ba9e607aa8bd7efce661b8c10e823378",
+    "choice": {
+      "model": "minirocket",
+      "T_seconds": 8,
+      "config_id": 0,
+      "config": {},
+      "selection_metric": "r3",
+      "development_selection_score": 0.6665343778013985,
+      "final_epochs": null,
+      "fold_best_epochs": [],
+      "fold_ridge_alphas": [
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0
+      ]
+    },
+    "final_ridge_alpha": 1000.0
+  },
+  "cnn_10s": {
+    "path": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw\\models\\cnn_10s.pt",
+    "sha256": "6f7d953210061cdfba4065ce87a75d87b83f3bbaafc3f1911e598b6876c60dc0",
+    "choice": {
+      "model": "cnn",
+      "T_seconds": 10,
+      "config_id": 0,
+      "config": {
+        "learning_rate": 0.001
+      },
+      "selection_metric": "r3",
+      "development_selection_score": 0.7738596788127595,
+      "final_epochs": 13,
+      "fold_best_epochs": [
+        7,
+        13,
+        2,
+        14,
+        13
+      ],
+      "fold_ridge_alphas": []
+    }
+  },
+  "minirocket_10s": {
+    "path": "C:\\Users\\simon\\ZHY_WORK\\wustl\\BME4400\\final project\\results_shaoxing_raw\\models\\minirocket_10s.joblib",
+    "sha256": "63fe5129377a82cd2621025b5b78d73b702e0b731bb8abc90e682de9af91c9da",
+    "choice": {
+      "model": "minirocket",
+      "T_seconds": 10,
+      "config_id": 0,
+      "config": {},
+      "selection_metric": "r3",
+      "development_selection_score": 0.6666162137631212,
+      "final_epochs": null,
+      "fold_best_epochs": [],
+      "fold_ridge_alphas": [
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0
+      ]
+    },
+    "final_ridge_alpha": 1000.0
+  }
+}

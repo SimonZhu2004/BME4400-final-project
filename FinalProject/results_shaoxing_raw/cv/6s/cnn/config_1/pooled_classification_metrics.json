@@ -1,0 +1,83 @@
+{
+  "summary": {
+    "precision_macro": 0.7117490179258962,
+    "recall_macro": 0.7145955873231831,
+    "macro_f1": 0.6293114153020213,
+    "r3": 0.7595249102760183,
+    "accuracy": 0.7277784802124162
+  },
+  "per_class": [
+    {
+      "class_name": "SR",
+      "label": 0,
+      "support": 1460,
+      "precision": 0.9202279202279202,
+      "recall": 0.22123287671232877,
+      "f1": 0.35670900055218113,
+      "auroc_ovr": null,
+      "auprc_ap_ovr": null
+    },
+    {
+      "class_name": "SB",
+      "label": 1,
+      "support": 3110,
+      "precision": 0.9690031701303276,
+      "recall": 0.8845659163987138,
+      "f1": 0.9248613212304589,
+      "auroc_ovr": null,
+      "auprc_ap_ovr": null
+    },
+    {
+      "class_name": "ST",
+      "label": 2,
+      "support": 1250,
+      "precision": 0.9408333333333333,
+      "recall": 0.9032,
+      "f1": 0.9216326530612244,
+      "auroc_ovr": null,
+      "auprc_ap_ovr": null
+    },
+    {
+      "class_name": "SI",
+      "label": 3,
+      "support": 317,
+      "precision": 0.15702005730659027,
+      "recall": 0.8643533123028391,
+      "f1": 0.26576139670223087,
+      "auroc_ovr": null,
+      "auprc_ap_ovr": null
+    },
+    {
+      "class_name": "AFIB",
+      "label": 4,
+      "support": 1422,
+      "precision": 0.8776371308016878,
+      "recall": 0.7313642756680732,
+      "f1": 0.7978519370924434,
+      "auroc_ovr": null,
+      "auprc_ap_ovr": null
+    },
+    {
+      "class_name": "AFL",
+      "label": 5,
+      "support": 350,
+      "precision": 0.4057724957555178,
+      "recall": 0.6828571428571428,
+      "f1": 0.5090521831735889,
+      "auroc_ovr": null,
+      "auprc_ap_ovr": null
+    }
+  ],
+  "ranking_metrics": "Use CV fold mean/std; do not pool margins from different fitted models",
+  "config": {
+    "learning_rate": 0.0003
+  },
+  "best_epochs": [
+    8,
+    8,
+    3,
+    9,
+    7
+  ],
+  "ridge_alphas": []
+}
