@@ -92,6 +92,15 @@ python src/feature_qc.py              # heart-rate check etc. -> results/feature
 
 Do not run `--split test` until PRD §5 step B3.
 
+**Dataset figures (for presentations).** Six 16:9 PNGs in `report/figures/`
+(unit funnel, class counts, example strips, heart rate / age by rhythm, R peaks
+per window). They read only the committed split, the committed development
+feature tables, figshare metadata and six development records' signals:
+
+```text
+python src/make_dataset_figures.py
+```
+
 **5. Evidence boundary.** Before every commit:
 
 ```text
